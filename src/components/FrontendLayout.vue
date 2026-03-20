@@ -62,7 +62,8 @@ const handleLogout = () => {
         background-color: #fff;
         .navbar-container {
             max-width: 1200px;
-            flex-shrink: 0;       /* 固定高度，不压缩 */
+            height: 100%;
+            margin: 0 auto;
             padding: 10px;
             display: flex;
             align-items: center;

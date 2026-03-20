@@ -403,7 +403,7 @@ const formatMessageContent = (content) => {
             padding: 14px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            min-height: 250px;
+            max-height: 508px;
             display: flex;
             flex-direction: column;
             .section-title {
@@ -418,9 +418,9 @@ const formatMessageContent = (content) => {
             }
             .session-list {
                 overflow-y: auto;
-                max-height: 200px;
                 scrollbar-width: thin;
                 scrollbar-color: rgba(64, 150, 255, 0.3) transparent;
+                height: 100%;
                 .session-item {
                     background-color: #f1e6d6;
                     position: relative;
@@ -710,6 +710,8 @@ const formatMessageContent = (content) => {
         flex-direction: column;
         overflow: hidden;
         flex: 1;
+        min-height: 700px;
+        max-height: 710px;
         .chat-header {
             background: linear-gradient(135deg, #fb923c 0%, #f59e0b 100%);
             color: white;
@@ -759,7 +761,6 @@ const formatMessageContent = (content) => {
             gap: 16px;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 252, 248, 0.05) 100%);
             min-height: 0;
-            max-height: calc(100vh - 200px);
             scrollbar-width: thin;
             scrollbar-color: rgba(251, 146, 60, 0.3) transparent;
             .message-item {
