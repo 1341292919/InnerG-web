@@ -20,8 +20,7 @@
                             <div class = "session-title">
                                 <span>{{ session.Title }}</span>
                                 <div class ="session-meta">
-                                    <span class ="session-time">{{ session.UpdatedAt ? new Date(session.UpdatedAt * 1000).toLocaleString() : '' }}
-                                    </span>
+                                    <span class ="session-time">{{ session.UpdatedAt ? formatTimeAgo(session.UpdatedAt) : '' }}</span>
                                 </div>
                                 <div class ="session-preview">
                                     {{ session.LastMessage }}
@@ -31,13 +30,7 @@
                                         <el-icon>
                                             <ChatRound/>
                                         </el-icon>
-                                        {{ session.MessageCount || 0 }}
-                                    </span>
-                                    <span>
-                                        <el-icon>
-                                            <Clock/>
-                                        </el-icon>
-                                        {{ session.MessageCount || 2 }} 分钟
+                                        {{ session.MessageNum || 0 }}
                                     </span>
                                 </div>
                             </div>
@@ -139,7 +132,7 @@ import { ChatRound, DeleteFilled, Promotion } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { el } from 'element-plus/es/locales.mjs';
 import{onMounted, ref}from 'vue'
-import { newSession, getSessionList,getSessionDetail } from '../api/consult/consult'
+import { newSession, getSessionList,getSessionDetail,deleteSession } from '../api/consult/consult'
 import MarkdownRenderer from '../components/MarkdownRenderer.vue'
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 
@@ -194,7 +187,6 @@ const startNewSession = (message) => {
         }
         currentSession.value.SessionId = res.data.data.SessionId
         currentSession.value.status = 'ACTIVE'
-        getSessionListByPage()
         messagesList.value.push({
             Role: 'user',
             Content: message,
@@ -322,7 +314,14 @@ const handleSelectSession =(session) =>{
 } 
 
 const handleDeleteSession =(session) =>{
-
+    deleteSession(session.SessionId).then(res =>{
+        if (res.data.code != 10000){
+            ElMessage.error('会话删除失败，请稍后再试')
+            return
+        }
+        ElMessage.success('会话删除成功')
+        getSessionListByPage()
+    })
 }
 
 // 定义对话消息数据
@@ -332,7 +331,34 @@ const messagesList = ref([])
 const formatMessageContent = (content) => {
     return content.replace(/\n/g, '<br>')
 }
-
+// 时间戳转换
+const formatTimeAgo = (timestamp) => {
+    if (!timestamp) return '刚刚'
+    
+    const now = Date.now() / 1000
+    const diff = now - timestamp
+    
+    // 小于1分钟
+    if (diff < 60) {
+        return '刚刚'
+    }
+    
+    // 小于1小时
+    if (diff < 3600) {
+        const minutes = Math.floor(diff / 60)
+        return `${minutes}分钟前`
+    }
+    
+    // 小于24小时
+    if (diff < 86400) {
+        const hours = Math.floor(diff / 3600)
+        return `${hours}小时前`
+    }
+    
+    // 大于1天
+    const days = Math.floor(diff / 86400)
+    return `${days}天前`
+}
 </script>
 
 
@@ -454,7 +480,7 @@ const formatMessageContent = (content) => {
                                 display: flex;
                                 align-items: center;
                                 gap: 8px;
-                                margin-bottom: 2px;
+                                margin-bottom: 4px;
                                 margin-top: 4px;
                                 .session-time {
                                     font-size: 12px;
@@ -474,8 +500,9 @@ const formatMessageContent = (content) => {
                                 display: flex;
                                 align-items: center;
                                 gap: 12px;
+                                margin-left: 5px;
                                 span {
-                                    font-size: 12px;
+                                    font-size: 13px;
                                     color: #999;
                                     display: flex;
                                     align-items: center;

@@ -11,3 +11,7 @@ export function getSessionList( params) {
 export function getSessionDetail(sessionId) {
     return service.get(`contact/session/detail`,{ params: { sessionId: sessionId } });
 }
+
+export function deleteSession(sessionId) {
+    return service.post(`contact/session/delete`, { sessionId });
+}
