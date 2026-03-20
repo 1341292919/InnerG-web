@@ -1,6 +1,6 @@
 <template>
     <div class = "frontend-layout">
-        <div class ="navbar-container">
+        <div class ="navbar-container" :style="{ background: navbarGradient }">
             <div class = "brand-section">
                 <el-image style = "width:50px;height:50px" :src ="iconUrl" alt = "品牌logo" class = "brand-logo" />
                 <h1 class= "brand-name">INNERG</h1>
@@ -36,12 +36,32 @@
 
 <script setup>
 import { lo, ro } from 'element-plus/es/locales.mjs'
-import{ref,onMounted} from 'vue'
-import { useRouter } from 'vue-router' 
+import{ref,onMounted,computed} from 'vue'
+import { useRouter,useRoute } from 'vue-router' 
 const iconUrl = new URL('../assets/dog.svg',import.meta.url).href
 
 const isLoggedIn = ref(false)
 const router = useRouter()
+const route = useRoute()
+// 根据当前路由返回对应的渐变样式
+const navbarGradient = computed(() => {
+    const path = route.path
+    
+    switch (path) {
+        case '/':
+            return 'linear-gradient(180deg, #c5fbf4 0%, #ffffff 100%)'  // 首页 - 清新绿
+        case '/consult':
+            return  'linear-gradient(180deg, #fff0d4 0%, #ffffff 100%)'  // AI咨询 - 粉嫩
+        case '/emotion-diary':
+            return 'linear-gradient(180deg, #ffe0f0 0%, #ffffff 100%)'  // 情绪日记 - 暖黄
+        case '/knowledge':
+            return 'linear-gradient(180deg, #e0e7ff 0%, #ffffff 100%)'  // 知识库 - 淡紫
+        default:
+            return 'linear-gradient(180deg, #c5fbf4 0%, #ffffff 100%)'
+    }
+})
+
+
 
 onMounted(()=>{
     isLoggedIn.value = localStorage.getItem('accessToken') !== null
@@ -61,16 +81,17 @@ const handleLogout = () => {
 .frontend-layout {
         background-color: #fff;
         .navbar-container {
-            max-width: 1200px;
-            height: 100%;
             margin: 0 auto;
             padding: 10px;
             display: flex;
+            width: 98%;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             .brand-section {
                 display: flex;
                 align-items: center;
+                margin-left: 250px;
                 .brand-name {
                     margin-left: 10px;
                     font-size: 24px;
@@ -82,6 +103,7 @@ const handleLogout = () => {
                 display: flex;
                 align-items: center;
                 gap: 40px;
+                margin-right: 230px;
                 .nav-link {
                     color: #4b5563;
                     font-size: 16px;

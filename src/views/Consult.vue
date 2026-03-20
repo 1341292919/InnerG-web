@@ -349,11 +349,10 @@ const formatMessageContent = (content) => {
         width: 320px;
         .ai-assistant-info {
             margin-bottom: 20px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 252, 248, 0.95) 100%);
-            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 250, 245, 0.92) 0%, rgba(255, 248, 240, 0.96) 100%);
             padding: 16px;
-            box-shadow: 0 8px 32px rgba(251, 146, 60, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(251, 146, 60, 0.08);
+            box-shadow: 0 8px 32px rgba(251, 146, 60, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(251, 146, 60, 0.15);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             .breathing-circle {
@@ -398,7 +397,7 @@ const formatMessageContent = (content) => {
             }
         }
         .session-history {
-            background: white;
+            background-color: #f8f2e8;
             border-radius: 16px;
             padding: 14px;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
@@ -422,7 +421,7 @@ const formatMessageContent = (content) => {
                 scrollbar-color: rgba(64, 150, 255, 0.3) transparent;
                 height: 100%;
                 .session-item {
-                    background-color: #f1e6d6;
+                    background-color: white;
                     position: relative;
                     display: flex;
                     align-items: flex-start;
