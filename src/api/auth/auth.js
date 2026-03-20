@@ -22,5 +22,5 @@ export function register(data) {
 }
 
 export function logout() {
-    
+    return service.post('/user/logout');
 }

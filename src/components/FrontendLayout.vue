@@ -10,9 +10,20 @@
                 <router-link to = "/consult" class = "nav-link" v-if = "isLoggedIn">AI咨询</router-link>
                 <router-link to = "/emotion-diary" class = "nav-link" v-if = "isLoggedIn">情绪日记</router-link>
                 <router-link to = "/knowledge" class = "nav-link">知识库</router-link>
-                <el-button v-if = "isLoggedIn" class = "logout-btn" type = "primary" @click = "handleLogout">
-                    退出登录
-                </el-button>
+                <el-dropdown 
+                    v-if="isLoggedIn" 
+                    trigger="hover" 
+                    @command="handleDropdownCommand"
+                >
+                    <el-avatar :src="userAvatarUrl" class="user-avatar" />
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item command="profile">个人信息</el-dropdown-item>
+                            <el-dropdown-item command="logout" divided @click="handleLogout">退出登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+
                 <template v-else>
                     <router-link to = '/auth/login' class = "nav-link">登录</router-link>
                     <router-link to ='/auth/register' class = "nav-link">
@@ -38,6 +49,7 @@
 import { lo, ro } from 'element-plus/es/locales.mjs'
 import{ref,onMounted,computed} from 'vue'
 import { useRouter,useRoute } from 'vue-router' 
+import { logout } from '../api/auth/auth.js'
 const iconUrl = new URL('../assets/dog.svg',import.meta.url).href
 
 const isLoggedIn = ref(false)
@@ -61,18 +73,26 @@ const navbarGradient = computed(() => {
     }
 })
 
-
-
+const userAvatarUrl = ref('') 
 onMounted(()=>{
     isLoggedIn.value = localStorage.getItem('accessToken') !== null
+    const avatar = localStorage.getItem('userAvatar')
+    if (avatar) {
+        userAvatarUrl.value = avatar
+    } else {
+        userAvatarUrl.value = new URL('../assets/brand_icon.svg', import.meta.url).href
+    }
 })
 
 const handleLogout = () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    localStorage.removeItem('userInfo')
-    localStorage.removeItem('userAvatar')
-    isLoggedIn.value = false
+    logout().then(() => {
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('userInfo')
+        localStorage.removeItem('userAvatar')
+        isLoggedIn.value = false
+    })
+    userAvatarUrl.value = new URL('../assets/brand_icon.svg', import.meta.url).href
     router.push('/')
 }
 </script>
@@ -111,7 +131,7 @@ const handleLogout = () => {
                     &:hover {
                         color: #4A90E2;
                     }
-                }
+                } 
             }
         }
 
@@ -128,4 +148,17 @@ const handleLogout = () => {
             }
         }
     }
+</style>
+
+<style lang="scss">
+.el-dropdown-menu__item {
+    color: #4b5563 !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    
+    &:hover {
+        color: #4A90E2 !important;
+        background-color: transparent !important;
+    }
+}
 </style>
