@@ -24,3 +24,17 @@ export function register(data) {
 export function logout() {
     return service.post('/user/logout');
 }
+
+export function uploadAvatar(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return service.post('/user/avatar', formData);
+}
+
+export function getUserInfo() {
+    return service.get('/user/info');
+}
+
+export function updateUserAccount(data) {
+    return service.post('/user/update/account', data);
+}

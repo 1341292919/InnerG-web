@@ -18,8 +18,8 @@
                     <el-avatar :src="userAvatarUrl" class="user-avatar" />
                     <template #dropdown>
                         <el-dropdown-menu>
-                            <el-dropdown-item command="profile">个人信息</el-dropdown-item>
-                            <el-dropdown-item command="logout" divided @click="handleLogout">退出登录</el-dropdown-item>
+                            <el-dropdown-item command="profile" >个人信息</el-dropdown-item>
+                            <el-dropdown-item command="logout" divided >退出登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
@@ -40,6 +40,7 @@
                 <p>&copy; 2026 INNERG . All rights reserved</p>
             </div>
         </div>
+        <UserInfo v-if="showProfile" @close="showProfile = false" @update="handleUserInfoUpdate" />
     </div>
 </template>
 
@@ -49,7 +50,8 @@
 import { lo, ro } from 'element-plus/es/locales.mjs'
 import{ref,onMounted,computed} from 'vue'
 import { useRouter,useRoute } from 'vue-router' 
-import { logout } from '../api/auth/auth.js'
+import { logout,getUserInfo } from '../api/auth/auth.js'
+import UserInfo from './UserInfo.vue'
 const iconUrl = new URL('../assets/dog.svg',import.meta.url).href
 
 const isLoggedIn = ref(false)
@@ -85,15 +87,42 @@ onMounted(()=>{
 })
 
 const handleLogout = () => {
+    router.push('/')
+    isLoggedIn.value = false
     logout().then(() => {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
         localStorage.removeItem('userInfo')
         localStorage.removeItem('userAvatar')
-        isLoggedIn.value = false
+        userAvatarUrl.value = new URL('../assets/brand_icon.svg', import.meta.url).href
     })
-    userAvatarUrl.value = new URL('../assets/brand_icon.svg', import.meta.url).href
-    router.push('/')
+}
+
+// 处理下拉菜单命令
+// 处理下拉菜单点击
+const handleDropdownCommand = (command) => {
+    if (command === 'profile') {
+        // 打开个人信息弹窗
+        // 这里需要你添加控制弹窗显示的状态
+        showProfile.value = true
+    } else if (command === 'logout') {
+        handleLogout()
+    }
+}
+// 查看个人信息
+const showProfile = ref(false)
+const handleUserInfoUpdate = () => {
+    getUserInfo().then((res) => {
+        if (res.data.code == 10000) {
+            console.log('用户信息已更新，刷新数据')
+            const userInfo = res.data.data
+            localStorage.setItem('userInfo', JSON.stringify(userInfo))
+            if (userInfo.Avatar) {
+                userAvatarUrl.value = userInfo.Avatar
+                localStorage.setItem('userAvatar', userInfo.Avatar)
+            }
+        }
+    })
 }
 </script>
 

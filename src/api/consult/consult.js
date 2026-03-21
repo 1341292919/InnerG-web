@@ -15,3 +15,4 @@ export function getSessionDetail(sessionId) {
 export function deleteSession(sessionId) {
     return service.post(`contact/session/delete`, { sessionId });
 }
+
