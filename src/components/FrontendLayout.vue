@@ -7,7 +7,7 @@
             </div>
             <div class = "nav-section">
                 <router-link to = "/" class = "nav-link">首页</router-link>
-                <router-link to = "/consult" class = "nav-link" v-if = "isLoggedIn">AI咨询</router-link>
+                <router-link to = "/consult" class = "nav-link" v-if = "isLoggedIn">咨询小G</router-link>
                 <router-link to = "/emotion-diary" class = "nav-link" v-if = "isLoggedIn">情绪日记</router-link>
                 <router-link to = "/knowledge" class = "nav-link">知识库</router-link>
                 <el-dropdown 
@@ -40,7 +40,7 @@
                 <p>&copy; 2026 INNERG . All rights reserved</p>
             </div>
         </div>
-        <UserInfo v-if="showProfile" @close="showProfile = false" @update="handleUserInfoUpdate" />
+        <UserInfo v-if="showProfile" @close="showProfile = false" @update="UserInfoUpdate" />
     </div>
 </template>
 
@@ -84,16 +84,17 @@ onMounted(()=>{
     } else {
         userAvatarUrl.value = new URL('../assets/brand_icon.svg', import.meta.url).href
     }
+    UserInfoUpdate()
 })
 
 const handleLogout = () => {
     router.push('/')
     isLoggedIn.value = false
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('userInfo')
+    localStorage.removeItem('userAvatar')
     logout().then(() => {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
-        localStorage.removeItem('userInfo')
-        localStorage.removeItem('userAvatar')
         userAvatarUrl.value = new URL('../assets/brand_icon.svg', import.meta.url).href
     })
 }
@@ -111,7 +112,7 @@ const handleDropdownCommand = (command) => {
 }
 // 查看个人信息
 const showProfile = ref(false)
-const handleUserInfoUpdate = () => {
+const UserInfoUpdate = () => {
     getUserInfo().then((res) => {
         if (res.data.code == 10000) {
             console.log('用户信息已更新，刷新数据')
