@@ -9,7 +9,7 @@
                 <p class ="description">每个深夜，每个焦虑的时刻，我们都在这里。不必独自承受，让心与心的连接温暖您的每一天</p>
                 <div class ="hero-actions">
                     <el-button size = "large" @click = "startConversation">开始倾诉，获得陪伴</el-button>
-                    <el-button size = "large" style = "border-color:#fff" color = "transparent" @click = "recordMood">记录心情，释放情感</el-button>
+                    <el-button size = "large" style = "border-color:#fff" color = "transparent" @click = "recordMood">聆听音乐，释放情感</el-button>
                 </div>
             </div>
             <div class = "icon"> 
