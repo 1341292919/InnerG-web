@@ -86,6 +86,14 @@ const frontendRoutes = [
             {
                 path :'knowledge',
                 component :  () => import('../views/Know.vue'),
+            },
+            {
+                path : 'music-list',
+                component : () => import('../views/MusicList.vue'),
+            },
+            {
+                path : 'music-player',
+                component : () => import('../views/MusicPlayer.vue'),
             }
         ]
     }

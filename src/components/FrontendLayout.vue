@@ -65,11 +65,15 @@ const navbarGradient = computed(() => {
         case '/':
             return 'linear-gradient(180deg, #c5fbf4 0%, #ffffff 100%)'  // 首页 - 清新绿
         case '/consult':
-            return  'linear-gradient(180deg, #fff0d4 0%, #ffffff 100%)'  // AI咨询 - 粉嫩
+            return  'linear-gradient(180deg, #fff0d4 0%, #ffffff 100%)'  // AI咨询 - 暖黄
         case '/emotion-diary':
-            return 'linear-gradient(180deg, #ffe0f0 0%, #ffffff 100%)'  // 情绪日记 - 暖黄
+            return 'linear-gradient(180deg, #ffe0f0 0%, #ffffff 100%)'  // 情绪日记 - 粉嫩
         case '/knowledge':
             return 'linear-gradient(180deg, #e0e7ff 0%, #ffffff 100%)'  // 知识库 - 淡紫
+        case '/music-player':
+            return 'linear-gradient(180deg, #ffe0f0 0%, #ffffff 100%)'  // 音乐播放器 
+        case '/music-list':
+            return 'linear-gradient(180deg, #ffe0f0 0%, #ffffff 100%)'  // 音乐列表 - 清新绿
         default:
             return 'linear-gradient(180deg, #c5fbf4 0%, #ffffff 100%)'
     }
