@@ -30,7 +30,7 @@
                     </div>
                     <div class = "song-info">
                         <p class = "song-name">{{ song.Name }}</p>
-                        <p class = "song-artist">{{ song.SingerId }}</p>
+                        <p class = "song-artist">{{ song.SingerName }}</p>
                     </div>
                 </li>
             </ul>

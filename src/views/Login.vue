@@ -1,9 +1,9 @@
 <template>
     <div class = "container">
         <div class = "title">
-            <div class = "back-home">
+            <div class = "back-home" @click = "router.push('/')" style = "cursor: pointer;">
                 <el-icon><Back /></el-icon>
-                <span>返回首页</span>
+                <span >返回首页</span>
             </div>
             <div class = "title-text">
                 <h2>登录您的账户</h2>
@@ -63,6 +63,7 @@ const submitForm = async() => {
     await ruleFormRef.value.validate((valid,fields) => {
         if (valid){
             login(formData).then(res => {
+                console.log(res.data.code)
                 if (res.data.code == 10000) {
                     ElMessage.success('登录成功');
                     const accessToken = res.headers['access-token'];
@@ -74,6 +75,7 @@ const submitForm = async() => {
                     localStorage.setItem('userAvatar', res.data.data.Avatar);
                     router.push('/');
                 } else {
+                    console.log(1)
                     ElMessage.error(res.data.message || '登录失败');
                 }
             })

@@ -43,7 +43,10 @@
 import { el, ro } from 'element-plus/es/locales.mjs';
 import {ref,reactive,computed,onUnmounted} from 'vue'
 import { getVerifyCode,register } from '../api/auth/auth';
+import {useRouter} from 'vue-router'
 import { ElMessage } from 'element-plus';
+
+const router = useRouter();
 
 const formData = ref({
     "email": "",
@@ -122,17 +125,15 @@ const handleRegister = () => {
         if (!valid) {
             ElMessage.error('请检查输入信息是否正确')
             return
-        }else{
+        } else {
             register(formData.value).then(res => {
-                if (res.data.code == "10000"){
+                if (res.data.code == "10000") {
                     ElMessage.success('注册成功');
-                    router.push('/auth/login')
+                    router.push('/auth/login')  // ← 这里执行了
                 } else {
                     ElMessage.error('注册失败，请检查后重试');
                 }
-                }).catch(err => {
-                    ElMessage.error('服务器繁忙，请稍后再试');
-                })
+            })
         }
     })
 }

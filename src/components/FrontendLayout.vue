@@ -88,7 +88,9 @@ onMounted(()=>{
     } else {
         userAvatarUrl.value = new URL('../assets/brand_icon.svg', import.meta.url).href
     }
-    UserInfoUpdate()
+    if (isLoggedIn.value) {
+        UserInfoUpdate()
+    }
 })
 
 const handleLogout = () => {

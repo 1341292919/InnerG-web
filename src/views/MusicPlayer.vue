@@ -11,7 +11,7 @@
                     </div>
                     <div class = "song-meta">
                         <h2 class = "song-title">{{ songDetail.Name }}</h2>
-                        <p class = "song-artist">{{ songDetail.Description }}</p>
+                        <p class = "song-artist">{{ songDetail.SingerName }}</p>
                         <p class = "song-album">{{ songDetail.Description }}</p>
                     </div>
                 </div>

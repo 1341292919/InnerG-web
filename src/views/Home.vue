@@ -19,17 +19,35 @@
     </div>
 </template>
 <script setup>
+import { ElMessage } from 'element-plus'
+import { el } from 'element-plus/es/locales.mjs'
+import { onMounted,ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const iconUrl = new URL('../assets/dog.svg',import.meta.url).href
 
+const isLoggedIn = ref(false)
+
 const startConversation = () => {
+    if (!isLoggedIn.value) {
+        ElMessage.warning('请先登录吧')
+        return
+    } 
     router.push('/consult');
 }
 const recordMood = () => {
+        if (!isLoggedIn.value) {
+        ElMessage.warning('请先登录吧')
+        return
+    } 
     router.push('/emotion-diary');
 }
+
+onMounted(() => {
+    isLoggedIn.value = localStorage.getItem('accessToken') !== null
+})
+
 </script>
 <style scoped lang = "scss">
 .home-container {

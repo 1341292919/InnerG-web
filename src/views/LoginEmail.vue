@@ -1,7 +1,7 @@
 <template>
     <div class = "container">
         <div class = "title">
-            <div class = "back-home">
+            <div class = "back-home" @click = "router.push('/')" style = "cursor: pointer;">
                 <el-icon><Back /></el-icon>
                 <span>返回首页</span>
             </div>
