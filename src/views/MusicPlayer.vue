@@ -2,7 +2,7 @@
     <div class = "player-page">
         <div class = "player-inner">
             <div class = "player-main">
-                <!-- -->
+                <!-- 只保留左侧内容，并居中显示 -->
                 <div class = "player-left">
                     <div class = "cover-wrap">
                         <div class = "cover-disc">
@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class = "player-controls">
-                <div class = "controls-main">
+                <div class = "controls-main" style="justify-content: center;">
                     <button class = "btn-circle btn-large" @click = "handleTogglePlay">
                         {{ isPlaying ? '⏸' : '▶' }}
                     </button>
@@ -139,8 +139,8 @@ const handleProgressBarClick = (event) => {
 
 <style scoped>
 .player-page {
-    min-height: calc(100vh - 90px);
-    background: radial-gradient(circle at top left, #2b2b2b, #000);
+    min-height: 758px;
+    background: radial-gradient(circle at top left, #3a2a30, #1a1215);
     color: #f5f5f5;
     display: flex;
     justify-content: center;
@@ -158,7 +158,7 @@ const handleProgressBarClick = (event) => {
 .player-main {
     width:100%;
     display: flex;
-    gap: 32px;
+    justify-content: center;
 }
 .player-left {
     width: 320px;
@@ -210,6 +210,7 @@ const handleProgressBarClick = (event) => {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-bottom: 30px;
 }
 .audio-hidden {
     display: none;

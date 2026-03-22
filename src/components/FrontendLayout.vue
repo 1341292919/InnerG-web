@@ -8,7 +8,7 @@
             <div class = "nav-section">
                 <router-link to = "/" class = "nav-link">首页</router-link>
                 <router-link to = "/consult" class = "nav-link" v-if = "isLoggedIn">咨询小G</router-link>
-                <router-link to = "/emotion-diary" class = "nav-link" v-if = "isLoggedIn">情绪日记</router-link>
+                <router-link to = "/emotion-diary" class = "nav-link" v-if = "isLoggedIn">情绪花园</router-link>
                 <router-link to = "/knowledge" class = "nav-link">知识库</router-link>
                 <el-dropdown 
                     v-if="isLoggedIn" 
@@ -71,7 +71,7 @@ const navbarGradient = computed(() => {
         case '/knowledge':
             return 'linear-gradient(180deg, #e0e7ff 0%, #ffffff 100%)'  // 知识库 - 淡紫
         case '/music-player':
-            return 'linear-gradient(180deg, #ffe0f0 0%, #ffffff 100%)'  // 音乐播放器 
+            return 'linear-gradient(180deg, #c5b0b3 0%, #ffffff 100%)' // 音乐播放器 
         case '/music-list':
             return 'linear-gradient(180deg, #ffe0f0 0%, #ffffff 100%)'  // 音乐列表 - 清新绿
         default:

@@ -1,7 +1,7 @@
 <template>
     <div class = "hall-wrapper">
         <div class = "hall-inner">
-            <h2 class = "section-title">情绪花园</h2>
+            <h2 class = "section-title">花园音乐</h2>
             <ul class = "playlist-list">
                 <li
                     v-for = "item in playlists"
@@ -19,7 +19,7 @@
                 </li>
             </ul>
             <!-- 新歌速递 -->
-            <h2 class = "section-title section-title--sub">推荐新音乐</h2>
+            <h2 class = "section-title section-title--sub">小G新推荐</h2>
             <ul class = "song-list">
                 <li class = "song-item"
                 v-for = "song in songsList"
@@ -85,6 +85,7 @@ const handlePlaylistClick = (row) => {
 .hall-wrapper {
     display: flex;
     justify-content: center;
+    background: linear-gradient(0deg, #ffd8e8 0%, #ffffff 100%);
 }
 .hall-inner {
     width: 100%;
@@ -136,15 +137,16 @@ const handlePlaylistClick = (row) => {
     margin-top: 8px;
 }
 .title {
-    font-size: 14px;
+    font-size: 16px;
     margin: 0 0 4px;
-    color: #333;
+    color: #111;
+    font-weight: bolder;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 .desc {
-    font-size: 12px;
+    font-size: 13px;
     color: #999;
     margin :0;
     white-space: nowrap;
@@ -188,17 +190,18 @@ const handlePlaylistClick = (row) => {
     flex: 1;
 }
 .song-name{
-    font-size: 14px;
+    font-size: 15px;
     margin: 0 0 4px;
-    color: #333;
+    color: #282727;
     white-space: nowrap;
     overflow: hidden;
+    font-weight: 400;
     text-overflow: ellipsis;
 }
 .song-artist {
     font-size: 12px;
     color: #999;
-    margin :0;
+    margin-top: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

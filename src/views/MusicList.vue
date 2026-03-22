@@ -78,6 +78,7 @@ const handleTrackClick = (song) => {
     padding: 24px 32px;
     box-sizing: border-box;
     min-height: calc(100vh-90px);
+    background: linear-gradient(120deg, #fff5f0 0%, #ffffff 100%);
 }
 .musiclist-inner {
     max-width: 1200px;
@@ -129,8 +130,9 @@ const handleTrackClick = (song) => {
     max-width: 50%;
 }
 .track-name{
-    font-size: 14px;
-    color: #333;
+    font-size: 15px;
+    color: #222;
+    font-weight: 560;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
