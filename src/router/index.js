@@ -48,6 +48,7 @@ const backendRoutes = [
     {
         path: '/auth',
         component: AuthLayout,
+        redirect: '/auth/login',
         children:[
             {
                 path: 'login',
@@ -108,6 +109,20 @@ const router = createRouter({
 // 登录时直接访问置后台
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('accessToken');
+
+        // 检查是否是以 /back 开头的路由
+    const isBackRoute = to.path.startsWith('/back');
+    
+    // 如果是后台路由，无论是否有 token 都跳转到首页
+    if (isBackRoute) {
+        next('/');
+        return;
+    }
+    if (to.path.startsWith('/knowledge')) {
+        next('/');
+        return;
+    }
+
     if (token){
         next();
     }else{

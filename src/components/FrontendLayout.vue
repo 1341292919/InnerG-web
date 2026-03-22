@@ -9,7 +9,7 @@
                 <router-link to = "/" class = "nav-link">首页</router-link>
                 <router-link to = "/consult" class = "nav-link" v-if = "isLoggedIn">咨询小G</router-link>
                 <router-link to = "/emotion-diary" class = "nav-link" v-if = "isLoggedIn">情绪花园</router-link>
-                <router-link to = "/knowledge" class = "nav-link">知识库</router-link>
+                <!-- <router-link to = "/knowledge" class = "nav-link">知识库</router-link> -->
                 <el-dropdown 
                     v-if="isLoggedIn" 
                     trigger="hover" 
@@ -162,8 +162,37 @@ const UserInfoUpdate = () => {
                     color: #4b5563;
                     font-size: 16px;
                     font-weight: 500;
+                    text-decoration: none;
+                    position: relative;
+                    padding-bottom: 4px;
+                    
+                    // 添加下划线效果
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        width: 0;
+                        height: 2px;
+                        background: linear-gradient(90deg, #4A90E2, #7cb8ff);
+                        transition: width 0.3s ease;
+                    }
+                    
                     &:hover {
                         color: #4A90E2;
+                        
+                        &::after {
+                            width: 100%;
+                        }
+                    }
+                    
+                    // 只使用精确匹配，避免首页一直高亮
+                    &.router-link-exact-active {
+                        color: #4A90E2;
+                        
+                        &::after {
+                            width: 100%;
+                        }
                     }
                 } 
             }

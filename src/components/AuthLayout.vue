@@ -2,7 +2,7 @@
     <div class = "auth-layout">
         <div class = "left-section">
             <div class = "content">
-                <h2 class = "title">与您交心的AI助手</h2>
+                <h2 class = "title">期待与您交心</h2>
                 <p class="description">向内探索，与温暖的自己重逢。
                     <br>
                     向外抬头，世界看见我们的美。
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-const iconUrl = new URL('../assets/robot.svg', import.meta.url).href;
+const iconUrl = new URL('../assets/dog.svg', import.meta.url).href;
 </script>
 
 <style scoped lang = "scss">
