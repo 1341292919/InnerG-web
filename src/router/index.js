@@ -63,6 +63,13 @@ const backendRoutes = [
                 meta:{
                     title: '注册',
                 }
+            },
+            {
+                path : 'login-email',
+                component: () => import('../views/LoginEmail.vue'),
+                meta:{
+                    title: '邮箱登录',
+                }
             }
         ]
     }
@@ -132,6 +139,8 @@ router.beforeEach((to, from, next) => {
             if (to.path =='/auth/login') {
                 next();
             }else if (to.path == '/auth/register') {
+                next();
+            }else if (to.path == '/auth/login-email') {
                 next();
             }else{
                 next('/');

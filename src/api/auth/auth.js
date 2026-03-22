@@ -38,3 +38,10 @@ export function getUserInfo() {
 export function updateUserAccount(data) {
     return service.post('/user/update/account', data);
 }
+
+export function verifyEmailAndLogin(data) {
+    const formData = new FormData();
+    formData.append('email', data.email);
+    formData.append('verify_code', data.verify_code);
+    return service.post('/user/email/login', formData);
+}

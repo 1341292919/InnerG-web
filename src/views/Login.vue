@@ -23,6 +23,7 @@
                 <el-form-item label="密码" prop="password">
                     <el-input v-model="formData.password" type="password" show-password size = "large" placeholder="请输入密码" />
                 </el-form-item>
+                <p>忘记密码?  <router-link to="login-email">使用邮箱验证登录</router-link></p>
                 <el-button class = "btn" size = "large" type = "primary" @click = "submitForm">登录</el-button>
             </el-form>
             <div class = "footer">
