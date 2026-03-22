@@ -32,6 +32,7 @@ const proxyTarget = cfg.server.proxyTarget
 export default defineConfig({
   plugins: [vue()],
   server: {
+    host: '0.0.0.0',
     port: serverPort,
     proxy: {
       '/api/v1':{
