@@ -45,3 +45,11 @@ export function verifyEmailAndLogin(data) {
     formData.append('verify_code', data.verify_code);
     return service.post('/user/email/login', formData);
 }
+
+export function updateUserName(data) {
+    return service.post('/user/update/username', data);
+}
+
+export function updateUserGender(data) {
+    return service.post('user/update/gender', data);
+}

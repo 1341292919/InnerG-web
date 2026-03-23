@@ -24,6 +24,7 @@
                 <li class = "song-item"
                 v-for = "song in songsList"
                 :key = "song.Id"
+                @click = "handleTrackClick(song)"
                 >
                     <div class = "song-cover">
                         <img :src = "song.CoverUrl" :alt = "song.Name" />
@@ -69,12 +70,19 @@ onMounted(() => {
 
 // 点击歌单项
 const handlePlaylistClick = (row) => {
-    console.log('点击了歌单：', row)
     // 处理播放列表点击事件
     if (!row.Id) return
-    console.log('跳转到歌单详情页，歌单ID：', row.Id)
     router.push({
         path: '/music-list',  // 注意：path 需要完整路径
+        query: { id: row.Id }
+    })
+}
+
+
+const handleTrackClick = (row) => {
+    if (!row.Id) return
+    router.push({
+        path: '/music-player',  // 注意：path 需要完整路径
         query: { id: row.Id }
     })
 }

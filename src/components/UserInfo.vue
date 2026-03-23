@@ -33,7 +33,7 @@
                     <div class="info-row">
                         <div class="info-label">用户名</div>
                         <div class="info-content">
-                            <span v-if="!editingFields.username">{{ userInfo.UserName }}</span>
+                            <span v-if="!editingFields.username">{{ userInfo.UserName || '-' }}</span>
                             <el-input 
                                 v-else 
                                 v-model="userInfo.UserName" 
@@ -54,7 +54,7 @@
                     <div class="info-row">
                         <div class="info-label">账号</div>
                         <div class="info-content">
-                            <span v-if="!editingFields.account">{{ userInfo.Account }}</span>
+                            <span v-if="!editingFields.account">{{ userInfo.Account || '-' }}</span>
                             <el-input 
                                 v-else 
                                 v-model="userInfo.Account" 
@@ -75,31 +75,16 @@
                     <div class="info-row">
                         <div class="info-label">邮箱</div>
                         <div class="info-content">
-                            <span v-if="!editingFields.email">{{ userInfo.Email }}</span>
-                            <el-input 
-                                v-else 
-                                v-model="userInfo.Email" 
-                                size="small"
-                                @blur="saveField('email')"
-                            />
+                            <span >{{ userInfo.Email}}</span>
                         </div>
-                        <el-button 
-                            v-if="!editingFields.email" 
-                            text 
-                            @click="startEdit('email')"
-                            class="edit-btn"
-                        >
-                            <el-icon><Edit /></el-icon>
-                        </el-button>
                     </div>
 
                     <div class="info-row">
                         <div class="info-label">性别</div>
                         <div class="info-content">
                             <el-radio-group v-model="userInfo.Gender" @change="saveField('gender')">
-                                <el-radio :value="0">保密</el-radio>
                                 <el-radio :value="1">男</el-radio>
-                                <el-radio :value="2">女</el-radio>
+                                <el-radio :value="0">女</el-radio>
                             </el-radio-group>
                         </div>
                     </div>
@@ -124,7 +109,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Close, Camera, Edit } from '@element-plus/icons-vue'
-import { uploadAvatar, updateUserAccount } from '../api/auth/auth'
+import { uploadAvatar, updateUserAccount ,updateUserGender,updateUserName} from '../api/auth/auth'
 
 const emit = defineEmits(['close', 'update'])
 
@@ -135,7 +120,7 @@ const userInfo = reactive({
     UserName: '',
     Account: '',
     Avatar: '',
-    Gender: 0,
+    Gender: '',
     CreatedAt: 0
 })
 
@@ -166,25 +151,36 @@ const startEdit = (field) => {
 const saveField = (field) => {
     editingFields[field] = false
     if (field === 'username') {
-        console.log('修改用户名:', userInfo.UserName)
-        // TODO: 调用修改用户名接口
+       updateUserName({ username: userInfo.UserName }).then(res => {
+            if (res.data.code == '10000') {
+                ElMessage.success('用户名更新成功')
+                emit('update', userInfo)
+            } else {
+                ElMessage.error('用户名更新失败')
+            }
+        })
     } else if (field === 'email') {
-        console.log('修改邮箱:', userInfo.Email)
         // TODO: 调用修改邮箱接口
     } else if (field === 'account') {
-        console.log('修改账号:', userInfo.Account)
         updateUserAccount({ Account: userInfo.Account }).then(res => {
             if (res.data.code === '10000') {
                 ElMessage.success('账号更新成功')
+                emit('update', userInfo)
             } else {
                 ElMessage.error(res.data.message || '账号更新失败')
             }
         })
     } else if (field === 'gender') {
-        console.log('修改性别:', userInfo.Gender)
-        // TODO: 调用修改性别接口
+         const genderValue = String(userInfo.Gender)
+        updateUserGender({ gender: genderValue }).then(res => {
+            if (res.data.code == '10000') {
+                ElMessage.success('性别更新成功')
+                emit('update', userInfo)
+            } else {
+                ElMessage.error('性别更新失败')
+            }
+        })
     }
-    emit('update', userInfo)
 }
 
 const triggerUpload = () => {
