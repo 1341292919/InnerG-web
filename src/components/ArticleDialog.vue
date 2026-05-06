@@ -70,12 +70,11 @@
     </el-dialog>
 </template>
 <script setup>
-import { ca } from 'element-plus/es/locales.mjs'
 import {ref,reactive,computed,nextTick,watch} from 'vue'
 import { ElMessage } from 'element-plus'
-import { uploadFile,createArticle,updateArticle } from '../api/backend/knowledge';
-import { fileBaseUrl } from '../config/config';
-import RichTextEditor from './RichTextEditor.vue'
+import { uploadFile,createArticle,updateArticle } from '@/api/backend/knowledge';
+import { fileBaseUrl } from '@/config/config';
+import RichTextEditor from '@/components/RichTextEditor.vue'
 // <!-- Vue 规定 props 是只读的，不能直接修改 -->
 const props = defineProps({
     paramToDialog :{

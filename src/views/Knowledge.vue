@@ -53,11 +53,11 @@
 </template>
 
 <script setup>
-import PageHead from '../components/PageHead.vue'
-import TableSearch from '../components/TableSearch.vue'
-import { categoryTree, articlePage,getArticleDetail, changeArticleStatus,deleteArticle} from '../api/backend/knowledge';
+import PageHead from '@/components/PageHead.vue'
+import TableSearch from '@/components/TableSearch.vue'
+import { categoryTree, articlePage,getArticleDetail, changeArticleStatus,deleteArticle} from '@/api/backend/knowledge';
 import { onMounted, reactive,ref } from 'vue';
-import ArticleDialog from '../components/ArticleDialog.vue'
+import ArticleDialog from '@/components/ArticleDialog.vue'
 import { ElMessageBox,ElMessage } from 'element-plus';
 
 const formItem = [

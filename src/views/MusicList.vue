@@ -35,7 +35,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getMusicList, getPlayList, getPlayListDetail } from '../api/music/music'
+import { getMusicList, getPlayList, getPlayListDetail } from '@/api/music/music'
 const route = useRoute()
 const router = useRouter()
 

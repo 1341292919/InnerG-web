@@ -130,10 +130,9 @@
 <script setup>
 import { ChatRound, DeleteFilled, Promotion } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import { el } from 'element-plus/es/locales.mjs';
 import{onMounted, ref}from 'vue'
-import { newSession, getSessionList,getSessionDetail,deleteSession } from '../api/consult/consult'
-import MarkdownRenderer from '../components/MarkdownRenderer.vue'
+import { newSession, getSessionList,getSessionDetail,deleteSession } from '@/api/consult/consult'
+import MarkdownRenderer from '@/components/MarkdownRenderer.vue'
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 
 const iconUrl = new URL('../assets/pig.svg', import.meta.url).href

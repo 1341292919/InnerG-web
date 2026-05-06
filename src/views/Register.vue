@@ -40,9 +40,8 @@
     </div>
 </template>
 <script setup>
-import { el, ro } from 'element-plus/es/locales.mjs';
 import {ref,reactive,computed,onUnmounted} from 'vue'
-import { getVerifyCode,register } from '../api/auth/auth';
+import { getVerifyCode,register } from '@/api/auth/auth';
 import {useRouter} from 'vue-router'
 import { ElMessage } from 'element-plus';
 

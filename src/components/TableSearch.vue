@@ -27,7 +27,6 @@
 </template>
 <script setup>
 import { Smoking } from '@element-plus/icons-vue';
-import { el } from 'element-plus/es/locales.mjs';
 import {ref,reactive,computed} from 'vue';
 
 const props = defineProps({

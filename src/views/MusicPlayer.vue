@@ -46,7 +46,7 @@
 <script setup>
 import { ref, onMounted,computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getMusicDetail } from '../api/music/music'
+import { getMusicDetail } from '@/api/music/music'
 
 const route = useRoute()
 

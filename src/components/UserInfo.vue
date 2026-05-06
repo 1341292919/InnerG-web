@@ -109,7 +109,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Close, Camera, Edit } from '@element-plus/icons-vue'
-import { uploadAvatar, updateUserAccount ,updateUserGender,updateUserName} from '../api/auth/auth'
+import { uploadAvatar, updateUserAccount ,updateUserGender,updateUserName} from '@/api/auth/auth'
 
 const emit = defineEmits(['close', 'update'])
 

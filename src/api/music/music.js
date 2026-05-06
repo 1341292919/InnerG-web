@@ -1,4 +1,4 @@
-import service from '../../utils/request';
+import service from '@/utils/request';
 
 export function getPlayList(params) {
   return service.get('music/playlist/list', { params });

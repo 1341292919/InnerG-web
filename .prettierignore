@@ -1,0 +1,4 @@
+dist
+node_modules
+备份
+*.log

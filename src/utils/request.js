@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-import { el } from 'element-plus/es/locales.mjs';
 
 // 创建实例
 const service = axios.create({

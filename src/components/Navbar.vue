@@ -26,10 +26,9 @@
 </template>
 
 <script setup>
-import { useAdminStore } from "../stores/admin";
+import { useAdminStore } from "@/stores/admin";
 import {useRouter,useRoute} from "vue-router";
 import { ElMessageBox } from "element-plus";
-import { lo } from "element-plus/es/locales.mjs";
 
 const router = useRouter();
 const route = useRoute();

@@ -1,0 +1,9 @@
+// styles/element/index.scss
+/* 覆盖 Element Plus 主题变量 */
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  $colors: (
+    "primary": (
+      "base": #4a9c8c,
+    ),
+  ),
+);

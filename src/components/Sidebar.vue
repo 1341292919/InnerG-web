@@ -23,7 +23,7 @@
     </el-aside>  
 </template>
 <script setup> 
-import { useAdminStore } from '../stores/admin';
+import { useAdminStore } from '@/stores/admin';
 import { computed } from 'vue';
 import { Key } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';

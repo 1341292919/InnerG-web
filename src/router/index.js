@@ -1,8 +1,7 @@
-import component from "element-plus/es/components/tree-select/src/tree-select-option.mjs";
 import { createRouter,createWebHistory } from "vue-router";
-import BackendLayout from "../components/BackendLayout.vue";
-import AuthLayout from "../components/AuthLayout.vue";
-import FrontendLayout from "../components/FrontendLayout.vue";
+import BackendLayout from "@/components/BackendLayout.vue";
+import AuthLayout from "@/components/AuthLayout.vue";
+import FrontendLayout from "@/components/FrontendLayout.vue";
 
 // 路由配置
 const backendRoutes = [
@@ -13,7 +12,7 @@ const backendRoutes = [
         children:[
             {
                 path: 'dashboard',
-                component: () => import('../views/Dashboard.vue'),
+                component: () => import('@/views/Dashboard.vue'),
                 meta:{
                     title: '数据分析',
                     icon: 'PieChart',
@@ -21,7 +20,7 @@ const backendRoutes = [
             },
             {
                 path:'knowledge',
-                component: () => import('../views/Knowledge.vue'),
+                component: () => import('@/views/Knowledge.vue'),
                 meta:{
                     title: '知识文章',
                     icon: 'ChatLineRound',
@@ -29,7 +28,7 @@ const backendRoutes = [
             },
             {
                 path:'consultations',
-                component: () => import('../views/Consultations.vue'),
+                component: () => import('@/views/Consultations.vue'),
                 meta:{
                     title: '咨询管理',
                     icon: 'ChatLineRound',
@@ -37,7 +36,7 @@ const backendRoutes = [
             },
             {
                 path:'mood-log',
-                component: () => import('../views/MoodLog.vue'),
+                component: () => import('@/views/MoodLog.vue'),
                 meta:{
                     title: '情绪日志',
                     icon: 'Document',
@@ -52,21 +51,21 @@ const backendRoutes = [
         children:[
             {
                 path: 'login',
-                component: () => import('../views/Login.vue'),
+                component: () => import('@/views/Login.vue'),
                 meta:{
                     title: '登录',
                 }    
             },
             {
                 path : 'register',
-                component: () => import('../views/Register.vue'),
+                component: () => import('@/views/Register.vue'),
                 meta:{
                     title: '注册',
                 }
             },
             {
                 path : 'login-email',
-                component: () => import('../views/LoginEmail.vue'),
+                component: () => import('@/views/LoginEmail.vue'),
                 meta:{
                     title: '邮箱登录',
                 }
@@ -81,27 +80,27 @@ const frontendRoutes = [
         children:[
             {
                 path :'',
-                component :  () => import('../views/Home.vue'),
+                component :  () => import('@/views/Home.vue'),
             },
             {
                 path :'consult',
-                component :  () => import('../views/Consult.vue'),
+                component :  () => import('@/views/Consult.vue'),
             },
             {
                 path :'emotion-diary',
-                component :  () => import('../views/MoodGarden.vue'),
+                component :  () => import('@/views/MoodGarden.vue'),
             },
             {
                 path :'knowledge',
-                component :  () => import('../views/Know.vue'),
+                component :  () => import('@/views/Know.vue'),
             },
             {
                 path : 'music-list',
-                component : () => import('../views/MusicList.vue'),
+                component : () => import('@/views/MusicList.vue'),
             },
             {
                 path : 'music-player',
-                component : () => import('../views/MusicPlayer.vue'),
+                component : () => import('@/views/MusicPlayer.vue'),
             }
         ]
     }

@@ -37,9 +37,8 @@
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Back } from '@element-plus/icons-vue'
-import { login } from '../api/auth/auth';
+import { login } from '@/api/auth/auth';
 import {useRouter} from 'vue-router'
-import { lo } from 'element-plus/es/locales.mjs';
 
 const ruleFormRef = ref(null);
 

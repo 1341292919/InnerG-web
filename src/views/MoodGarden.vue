@@ -40,7 +40,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getPlayList, getMusicList } from '../api/music/music'
+import { getPlayList, getMusicList } from '@/api/music/music'
 import { useRouter } from 'vue-router'  // 添加这行
 
 const router = useRouter()  // 添加这行

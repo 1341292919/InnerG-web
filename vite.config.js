@@ -3,8 +3,10 @@ import vue from '@vitejs/plugin-vue'
 import fs from 'fs'
 import path from 'path'
 import { load } from 'js-yaml'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import ElementPlus from 'unplugin-element-plus/vite'
 
-// 读取 config/config.yaml 中的配置（端口和 proxy target）
 const cfgPath = path.resolve(process.cwd(), 'config', 'config.yaml')
 let cfg = {}
 try {
@@ -28,17 +30,37 @@ if (!cfg.server || !cfg.server.port || !cfg.server.proxyTarget) {
 const serverPort = cfg.server.port
 const proxyTarget = cfg.server.proxyTarget
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    Components({
+      resolvers: [ElementPlusResolver({
+        importStyle: 'sass'
+      })],
+    }),
+    ElementPlus()
+  ],
+  resolve: {
+    alias: {
+      '~': path.resolve(__dirname, './'),
+      '@': path.resolve(__dirname, 'src')
+    },
+  },
   server: {
     host: '0.0.0.0',
     port: serverPort,
     proxy: {
-      '/api/v1':{
-        target: proxyTarget, // 目标服务器地址（从 config/config.yaml 读取）
-        changeOrigin: true, // 是否改变请求头中的origin字段
+      '/api/v1': {
+        target: proxyTarget,
+        changeOrigin: true,
       }
     }
-  }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/styles/element/index.scss" as *;`,
+      },
+    },
+  },
 })

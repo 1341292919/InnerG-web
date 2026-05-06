@@ -78,10 +78,9 @@
    </div>
 </template>
 <script setup>
-import PageHead from '../components/PageHead.vue'
-import { consultationPage,getSessionDetail } from '../api/backend/consultations'
+import PageHead from '@/components/PageHead.vue'
+import { consultationPage,getSessionDetail } from '@/api/backend/consultations'
 import { onMounted ,ref,reactive} from 'vue';
-import { el, ta } from 'element-plus/es/locales.mjs';
 
 const tableData = ref([])
 

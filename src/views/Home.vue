@@ -20,7 +20,6 @@
 </template>
 <script setup>
 import { ElMessage } from 'element-plus'
-import { el } from 'element-plus/es/locales.mjs'
 import { onMounted,ref } from 'vue'
 import { useRouter } from 'vue-router'
 

@@ -47,11 +47,10 @@
 
 
 <script setup>
-import { lo, ro } from 'element-plus/es/locales.mjs'
 import{ref,onMounted,computed} from 'vue'
 import { useRouter,useRoute } from 'vue-router' 
-import { logout,getUserInfo } from '../api/auth/auth.js'
-import UserInfo from './UserInfo.vue'
+import { logout,getUserInfo } from '@/api/auth/auth'
+import UserInfo from '@/components/UserInfo.vue'
 const iconUrl = new URL('../assets/dog.svg',import.meta.url).href
 
 const isLoggedIn = ref(false)

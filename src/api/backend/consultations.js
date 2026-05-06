@@ -1,4 +1,4 @@
-import service from '../../utils/request';
+import service from '@/utils/request';
 
 export function consultationPage(params) {
     return service.get('/psychological-chat/sessions', { params });
