@@ -56,7 +56,7 @@
           <div class="messages-header">
             <h4>对话记录</h4>
           </div>
-          <div class="messages-list" v-loading="loadingMessages">
+          <div v-loading="loadingMessages" class="messages-list">
             <div
               v-for="message in sessionMessages"
               :key="message.id"

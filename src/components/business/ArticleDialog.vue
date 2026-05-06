@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :title="isEditMode ? '编辑文章' : '创建文章'" v-model="dialogVisible" width="50%" @close="handleClose">
-    <el-form :model="formData" :rules="rules" ref="formRef" label-width="120px">
+  <el-dialog v-model="dialogVisible" :title="isEditMode ? '编辑文章' : '创建文章'" width="50%" @close="handleClose">
+    <el-form ref="formRef" :model="formData" :rules="rules" label-width="120px">
       <el-form-item label="文章标题" prop="title">
         <el-input v-model="formData.title" placeholder="请输入文章标题" maxlength="200" show-word-limit clearable />
       </el-form-item>
@@ -61,21 +61,21 @@
         <RichTextEditor
           v-model="formData.content"
           placeholder="请输入文章内容,支持富文本编辑"
-          :maxCharCount="5000"
+          :max-char-count="5000"
+          min-height="400px"
           @change="handleContentChange"
           @create="handleEditorCreate"
-          min-height="400px"
         />
       </el-form-item>
     </el-form>
     <div v-if="btnPreview" class="content-preview">
       <h3>内容预览</h3>
-      <div v-html="formData.content" class="preview-area"></div>
+      <div class="preview-area" v-html="formData.content"></div>
     </div>
     <template #footer>
       <el-button @click="btnPreview = !btnPreview">{{ btnPreview ? '隐藏预览' : '预览效果' }}</el-button>
       <el-button @click="handleClose">取消</el-button>
-      <el-button type="primary" @click="handleSubmit" :loading="loading">{{
+      <el-button type="primary" :loading="loading" @click="handleSubmit">{{
         isEditMode ? '更新文章' : '创建文章'
       }}</el-button>
     </template>
@@ -224,7 +224,7 @@ const btnPreview = ref(false)
 const formRef = ref(null)
 const loading = ref(false)
 const handleSubmit = () => {
-  formRef.value.validate((valid, fields) => {
+  formRef.value.validate((valid, _fields) => {
     if (valid) {
       loading.value = true
     }
@@ -235,7 +235,7 @@ const handleSubmit = () => {
     delete submitData.tagArray
 
     if (isEditMode.value) {
-      updateArticle(props.article.id, submitData).then((resp) => {
+      updateArticle(props.article.id, submitData).then((_resp) => {
         loading.value = false
         emit('success')
         ElMessage.success('文章更新成功')
@@ -243,7 +243,7 @@ const handleSubmit = () => {
       })
       return
     } else {
-      createArticle(submitData).then((resp) => {
+      createArticle(submitData).then((_resp) => {
         loading.value = false
         emit('success')
         ElMessage.success('文章创建成功')

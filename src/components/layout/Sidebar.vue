@@ -9,10 +9,10 @@
         </div>
       </div>
       <el-menu-item
-        @click="selectMenu"
         v-for="item in router.options.routes[0].children"
         :key="item.path"
         :index="item.path"
+        @click="selectMenu"
       >
         <el-icon><component :is="item.meta.icon" /></el-icon>
         <span>{{ item.meta.title }}</span>
@@ -23,7 +23,6 @@
 <script setup>
 import { useAdminStore } from '@/stores/admin'
 import { computed } from 'vue'
-import { Key } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 

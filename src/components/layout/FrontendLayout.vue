@@ -1,15 +1,14 @@
 <template>
   <div class="frontend-layout">
-    <div class="navbar-container" :style="{ background: navbarGradient }">
+    <header class="navbar-container" :style="{ background: navbarGradient }">
       <div class="brand-section">
         <el-image style="width: 50px; height: 50px" :src="iconUrl" alt="品牌logo" class="brand-logo" />
         <h1 class="brand-name">INNERG</h1>
       </div>
-      <div class="nav-section">
+      <nav class="nav-section" aria-label="主导航">
         <router-link to="/" class="nav-link">首页</router-link>
-        <router-link to="/consult" class="nav-link" v-if="isLoggedIn">咨询小G</router-link>
-        <router-link to="/emotion-diary" class="nav-link" v-if="isLoggedIn">情绪花园</router-link>
-        <!-- <router-link to = "/knowledge" class = "nav-link">知识库</router-link> -->
+        <router-link v-if="isLoggedIn" to="/consult" class="nav-link">咨询小G</router-link>
+        <router-link v-if="isLoggedIn" to="/emotion-diary" class="nav-link">情绪花园</router-link>
         <el-dropdown v-if="isLoggedIn" trigger="hover" @command="handleDropdownCommand">
           <el-avatar :src="userAvatarUrl" class="user-avatar" />
           <template #dropdown>
@@ -26,16 +25,16 @@
             <el-button type="primary">注册</el-button>
           </router-link>
         </template>
-      </div>
-    </div>
-    <div class="main-content">
+      </nav>
+    </header>
+    <main class="main-content">
       <router-view></router-view>
-    </div>
-    <div class="footer-container">
+    </main>
+    <footer class="footer-container">
       <div class="footer-bottom">
         <p>&copy; 2026 INNERG . All rights reserved</p>
       </div>
-    </div>
+    </footer>
     <UserInfo v-if="showProfile" @close="showProfile = false" @update="UserInfoUpdate" />
   </div>
 </template>

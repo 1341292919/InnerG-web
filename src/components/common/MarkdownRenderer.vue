@@ -10,12 +10,12 @@ import { computed } from 'vue'
 const props = defineProps({
   content: {
     type: String,
-    required: true
+    required: true,
   },
   isAiMessage: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 // 简单的Markdown渲染器
@@ -201,8 +201,3 @@ const renderedContent = computed(() => {
   color: #6b7280;
 }
 </style>
-
-
-
-
-

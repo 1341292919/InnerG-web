@@ -54,7 +54,7 @@ const handleCommand = (command) => {
   }
 }
 </script>
-<style>
+<style scoped>
 .navbar {
   height: 64px;
   display: flex;

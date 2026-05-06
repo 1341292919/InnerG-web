@@ -1,7 +1,7 @@
 <template>
-  <div class="consultation-container">
-    <div class="sidebar">
-      <div class="ai-assistant-info">
+  <main class="consultation-container">
+    <aside class="sidebar" aria-label="AI助手面板">
+      <section class="ai-assistant-info">
         <div class="breathing-circle">
           <el-image style="width: 40px; height: 40px" :src="iconUrl" alt="图标" />
         </div>
@@ -10,16 +10,15 @@
           <div class="status-dot"></div>
           在线服务中
         </div>
-      </div>
-      <!-- 会话历史 -->
-      <div class="session-history">
+      </section>
+      <section class="session-history" aria-label="会话历史">
         <h4 class="section-title">会话列表</h4>
         <div class="session-list">
           <div
             v-for="session in sessionList"
             :key="session.SessionId"
-            @click="handleSelectSession(session)"
             class="session-item"
+            @click="handleSelectSession(session)"
           >
             <div class="session-info">
               <div class="session-title">
@@ -49,10 +48,10 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="chat-main">
-      <div class="chat-header">
+      </section>
+    </aside>
+    <section class="chat-main">
+      <header class="chat-header">
         <div class="header-left">
           <div class="chat-avatar">
             <el-image style="width: 30px; height: 30px" :src="avatarUrl" alt="头像" />
@@ -62,15 +61,15 @@
             <p>您的贴心AI心灵健康助手</p>
           </div>
         </div>
-        <el-button circle @click="createNewSession" title="新建会话">
+        <el-button circle title="新建会话" @click="createNewSession">
           <el-icon>
             <Plus />
           </el-icon>
         </el-button>
-      </div>
-      <div class="chat-messages">
+      </header>
+      <div class="chat-messages" role="log" aria-label="对话消息">
         <!--默认的欢迎消息-->
-        <div class="message-item ai-message" v-if="messagesList.length === 0">
+        <div v-if="messagesList.length === 0" class="message-item ai-message">
           <div class="message-avatar">
             <el-image :src="avatarUrl" style="width: 20px; height: 20px" />
           </div>
@@ -125,7 +124,7 @@
           </div>
         </div>
       </div>
-      <div class="chat-input">
+      <footer class="chat-input">
         <div class="input-container">
           <el-input
             v-model="userMessage"
@@ -133,10 +132,10 @@
             type="textarea"
             :rows="3"
             :disable="isAiTyping"
-            @keyup.enter="sendMessage"
             class="message-input"
             style="font-family: 'Microsoft YaHei', sans-serif; font-size: 14px"
             clearable
+            @keyup.enter="sendMessage"
           />
           <div class="input-footer">
             <span class="input-hint">按 Enter 发送消息</span>
@@ -146,18 +145,18 @@
         <el-button
           :disabled="isAiTyping || userMessage.length > 1000 || !userMessage.trim()"
           type="primary"
-          @click="sendMessage"
           class="send-btn"
           circle
           title="发送消息"
+          @click="sendMessage"
         >
           <el-icon>
             <Promotion />
           </el-icon>
         </el-button>
-      </div>
-    </div>
-  </div>
+      </footer>
+    </section>
+  </main>
 </template>
 
 <script setup>
@@ -228,7 +227,7 @@ const startNewSession = (message) => {
       })
       startAIResponse(currentSession.value.SessionId, message)
     })
-    .catch((err) => {
+    .catch((_err) => {
       ElMessage.error('网络异常，请稍后再试')
     })
 }
@@ -281,7 +280,7 @@ const startAIResponse = (sessionId, userMessage) => {
         return
       }
       const payload = JSON.parse(raw)
-      const ok = String(payload.Code) == '10000'
+      const ok = String(payload.Code) === '10000'
       if (!ok) {
         handleStreamError(payload.message || 'AI回复失败')
       } else {
@@ -299,7 +298,7 @@ const startAIResponse = (sessionId, userMessage) => {
   })
 }
 
-const handleStreamError = (error) => {
+const handleStreamError = (_error) => {
   const aiMessage = messagesList.value[messagesList.value.length - 1]
   if (aiMessage) {
     aiMessage.Content = 'AI回复失败，请稍后再试'
@@ -326,7 +325,7 @@ const getSessionListByPage = () => {
       // 将返回的会话列表绑定到页面
       sessionList.value = res.data.data.SessionList
     })
-    .catch((err) => {
+    .catch((_err) => {
       ElMessage.error('网络异常，请稍后再试')
     })
 }
@@ -345,7 +344,7 @@ const handleSelectSession = (session) => {
       currentSession.value.Title = res.data.data.SessionDetail.Title
       currentSession.value.status = 'ACTIVE'
     })
-    .catch((err) => {
+    .catch((_err) => {
       ElMessage.error('网络异常，请稍后再试')
     })
 }

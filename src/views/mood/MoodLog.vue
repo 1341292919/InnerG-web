@@ -1,7 +1,7 @@
 <template>
   <div>
     <PageHead title="情绪日志" />
-    <TableSearch :formItem="formItem" @search="handleSearch" />
+    <TableSearch :form-item="formItem" @search="handleSearch" />
     <el-table :data="tableData" style="width: 100%; margin-top: 25px">
       <el-table-column prop="id" label="用户ID" width="80" />
       <el-table-column label="会话ID" width="100">
@@ -40,8 +40,14 @@
         @change="handlePageChange"
       />
     </div>
-    <el-dialog v-model="detailDialogVisible" title="情绪日志详情" width="800px" :close-on-click-modal="false">
-      <div class="detail-content">
+    <el-dialog
+      v-model="detailDialogVisible"
+      title="情绪日志详情"
+      width="800px"
+      :close-on-click-modal="false"
+      aria-label="情绪日志详情弹窗"
+    >
+      <article class="detail-content">
         <div class="detail-section">
           <h4>用户信息</h4>
           <el-descriptions :column="2" border>
@@ -120,7 +126,7 @@
             <li v-for="item in aiData.improvementSuggestions" :key="item">{{ item }}</li>
           </ul>
         </div>
-      </div>
+      </article>
     </el-dialog>
   </div>
 </template>
@@ -188,7 +194,7 @@ const viewMoodLogDetail = (row) => {
   }
   detailDialogVisible.value = true
 }
-const deleteMoodLog = (row) => {}
+const deleteMoodLog = (_row) => {}
 
 // 情绪映射
 const getEmotionTagType = (emotion) => {
@@ -225,29 +231,9 @@ const getEmotionScoreColor = (score) => {
   if (score >= 40) return '#909399'
   return '#67c23a'
 }
-
-const getRiskLevelTagType = (riskLevel) => {
-  const riskTagMap = {
-    0: 'success',
-    1: 'info',
-    2: 'warning',
-    3: 'danger',
-  }
-  return riskTagMap[riskLevel] || 'info'
-}
-
-const getRiskLevelText = (riskLevel) => {
-  const riskTextMap = {
-    0: '正常',
-    1: '关注',
-    2: '预警',
-    3: '危机',
-  }
-  return riskTextMap[riskLevel] || '未知风险等级'
-}
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .detail-content {
   .detail-section {
     margin-bottom: 24px;
