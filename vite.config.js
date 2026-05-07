@@ -34,16 +34,18 @@ export default defineConfig({
   plugins: [
     vue(),
     Components({
-      resolvers: [ElementPlusResolver({
-        importStyle: 'sass'
-      })],
+      resolvers: [
+        ElementPlusResolver({
+          importStyle: 'sass',
+        }),
+      ],
     }),
-    ElementPlus()
+    ElementPlus(),
   ],
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './'),
-      '@': path.resolve(__dirname, 'src')
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   server: {
@@ -53,13 +55,13 @@ export default defineConfig({
       '/api/v1': {
         target: proxyTarget,
         changeOrigin: true,
-      }
-    }
+      },
+    },
   },
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/styles/element/index.scss" as *;`,
+        additionalData: `@use "@/styles/element/index.scss" as *;\n@use "@/styles/variables.scss" as *;`,
       },
     },
   },
