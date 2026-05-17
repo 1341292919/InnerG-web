@@ -1,6 +1,3 @@
 export * from './endpoints/auth.js'
 export * from './endpoints/contact.js'
 export * from './endpoints/music.js'
-export * from './endpoints/knowledge.js'
-export * from './endpoints/moodlog.js'
-export * from './endpoints/psych-chat.js'
