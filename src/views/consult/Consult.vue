@@ -163,7 +163,7 @@
 import { ChatRound, DeleteFilled, Promotion } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
-import { newSession, getSessionList, getSessionDetail, deleteSession } from '@/api/consult/consult'
+import { newSession, getSessionList, getSessionDetail, deleteSession } from '@/api'
 import MarkdownRenderer from '@/components/common/MarkdownRenderer.vue'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
 
@@ -212,24 +212,16 @@ const sendMessage = () => {
 }
 const startNewSession = (message) => {
   // 调接口
-  newSession()
-    .then((res) => {
-      if (res.data.code != 10000) {
-        ElMessage.error('会话创建失败，请稍后再试')
-        return
-      }
-      currentSession.value.SessionId = res.data.data.SessionId
-      currentSession.value.status = 'ACTIVE'
-      messagesList.value.push({
-        Role: 'user',
-        Content: message,
-        CreatedAt: Math.floor(Date.now() / 1000),
-      })
-      startAIResponse(currentSession.value.SessionId, message)
+  newSession().then((res) => {
+    currentSession.value.SessionId = res.data.data.SessionId
+    currentSession.value.status = 'ACTIVE'
+    messagesList.value.push({
+      Role: 'user',
+      Content: message,
+      CreatedAt: Math.floor(Date.now() / 1000),
     })
-    .catch((_err) => {
-      ElMessage.error('网络异常，请稍后再试')
-    })
+    startAIResponse(currentSession.value.SessionId, message)
+  })
 }
 
 // 发送信息

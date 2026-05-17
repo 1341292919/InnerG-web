@@ -135,7 +135,7 @@
 import PageHead from '@/components/common/PageHead.vue'
 import TableSearch from '@/components/common/TableSearch.vue'
 import { onMounted, ref, reactive } from 'vue'
-import { moodLogPage } from '@/api/backend/moodlog'
+import { moodLogPage } from '@/api'
 
 const formItem = [
   { comp: 'input', prop: 'userId', label: '用户ID', placeHolder: '请输入用户ID' },

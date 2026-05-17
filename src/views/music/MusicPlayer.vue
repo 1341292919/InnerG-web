@@ -49,7 +49,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { getMusicDetail } from '@/api/music/music'
+import { getMusicDetail } from '@/api'
 
 const route = useRoute()
 
@@ -71,10 +71,7 @@ onMounted(() => {
 const fetchSongDetail = async () => {
   getMusicDetail(songId.value)
     .then((response) => {
-      if (response.data.code == 10000) {
-        songDetail.value = response.data.data.SongDetail
-        console.log('歌曲详情数据:', songDetail)
-      }
+      songDetail.value = response.data.data.SongDetail
     })
     .catch((error) => {
       console.error('获取歌曲详情失败:', error)

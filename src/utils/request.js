@@ -1,17 +1,12 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { ResultEnum, RejectEnum, SuccessCodeList } from '@/api/enum'
 
-/**
- * Axios 实例，预配置 baseURL 和超时时间
- */
 const service = axios.create({
   baseURL: '/api/v1',
   timeout: 10000,
 })
 
-/**
- * 请求拦截器：自动注入 accessToken
- */
 service.interceptors.request.use(
   (config) => {
     config.headers['X-Requested-With'] = 'XMLHttpRequest'
@@ -27,22 +22,77 @@ service.interceptors.request.use(
   },
 )
 
-/**
- * 响应拦截器：统一解包与错误处理
- * - code == 10000：正常返回
- * - code == 401/419：清除 token，跳转登录页
- * - 其他错误码：ElMessage 提示错误信息
- */
+let refreshing = false
+let pendingQueue = []
+
+function replayQueue() {
+  pendingQueue.forEach(({ resolve, config }) => {
+    resolve(service(config))
+  })
+  pendingQueue = []
+}
+
+function rejectQueue(reason) {
+  pendingQueue.forEach(({ reject }) => {
+    reject(reason)
+  })
+  pendingQueue = []
+}
+
+async function refreshAccessToken() {
+  const refreshToken = localStorage.getItem('refreshToken')
+  if (!refreshToken) {
+    throw new Error('No refresh token')
+  }
+  return service.get('/user/refresh-token', {
+    headers: { Authorization: refreshToken },
+  })
+}
+
 service.interceptors.response.use(
   (response) => {
-    const { data } = response
-    if (data.code == 10000) {
+    const { data, config } = response
+
+    if (refreshing && config.url !== '/user/refresh-token') {
+      return new Promise((resolve, reject) => {
+        pendingQueue.push({ config, resolve, reject })
+      })
+    }
+
+    if (SuccessCodeList.includes(data.code)) {
       return response
+    }
+
+    if (data.code === ResultEnum.AuthAccessExpiredCode) {
+      refreshing = true
+      return refreshAccessToken()
+        .then((res) => {
+          const headers = res.headers
+          if (headers['access-token']) {
+            localStorage.setItem('accessToken', headers['access-token'])
+          }
+          if (headers['refresh-token']) {
+            localStorage.setItem('refreshToken', headers['refresh-token'])
+          }
+          replayQueue()
+          refreshing = false
+          return service(config)
+        })
+        .catch(() => {
+          rejectQueue({ type: RejectEnum.AuthFailed })
+          refreshing = false
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
+          localStorage.removeItem('userInfo')
+          localStorage.removeItem('userAvatar')
+          window.location.href = '/auth/login'
+          return Promise.reject({ type: RejectEnum.AuthFailed })
+        })
     }
 
     ElMessage.error(data.message || '请求失败')
 
-    if (data.code == 401 || data.code == 419) {
+    if (data.code === ResultEnum.AuthInvalidCode || data.code === ResultEnum.AuthRefreshExpiredCode) {
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('userInfo')
@@ -50,12 +100,20 @@ service.interceptors.response.use(
       window.location.href = '/auth/login'
     }
 
-    return Promise.reject(data)
+    return Promise.reject({ type: RejectEnum.BizFailed, data })
   },
   (error) => {
     console.error('响应错误:', error)
+    if (error.message && error.message.includes('timeout')) {
+      ElMessage.error('请求超时，请稍后再试')
+      return Promise.reject({ type: RejectEnum.Timeout })
+    }
+    if (error.message && error.message.includes('Network Error')) {
+      ElMessage.error('网络异常，请稍后再试')
+      return Promise.reject({ type: RejectEnum.NetworkError })
+    }
     ElMessage.error('网络异常，请稍后再试')
-    return Promise.reject(error)
+    return Promise.reject({ type: RejectEnum.InternalFailed, data: error })
   },
 )
 

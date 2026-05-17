@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { logout as logoutApi, getUserInfo } from '@/api/auth/auth'
+import { logout as logoutApi, getUserInfo } from '@/api'
 
 /**
  * 认证相关组合式函数
@@ -39,13 +39,11 @@ export function useAuth() {
   /** 从后端刷新用户信息并更新本地缓存 */
   async function updateUserInfo() {
     const res = await getUserInfo()
-    if (res.data.code == 10000) {
-      const userInfo = res.data.data
-      localStorage.setItem('userInfo', JSON.stringify(userInfo))
-      if (userInfo.Avatar) {
-        userAvatarUrl.value = userInfo.Avatar
-        localStorage.setItem('userAvatar', userInfo.Avatar)
-      }
+    const userInfo = res.data.data
+    localStorage.setItem('userInfo', JSON.stringify(userInfo))
+    if (userInfo.Avatar) {
+      userAvatarUrl.value = userInfo.Avatar
+      localStorage.setItem('userAvatar', userInfo.Avatar)
     }
   }
 

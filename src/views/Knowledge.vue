@@ -2,14 +2,7 @@
   <div>
     <PageHead title="知识文章">
       <template #buttons>
-        <el-button
-          type="primary"
-          @click="
-            dialogVisible = true
-            currentArticle = null
-          "
-          >新增</el-button
-        >
+        <el-button type="primary" @click="((dialogVisible = true), (currentArticle = null))">新增</el-button>
       </template>
     </PageHead>
     <TableSearch :form-item="formItem" @search="handleSearch" />
@@ -76,19 +69,12 @@
 <script setup>
 import PageHead from '@/components/common/PageHead.vue'
 import TableSearch from '@/components/common/TableSearch.vue'
-import {
-  categoryTree,
-  articlePage,
-  getArticleDetail,
-  changeArticleStatus,
-  deleteArticle,
-} from '@/api/backend/knowledge'
+import { categoryTree, articlePage, getArticleDetail, changeArticleStatus, deleteArticle } from '@/api'
 import { onMounted, reactive, ref } from 'vue'
 import ArticleDialog from '@/components/business/ArticleDialog.vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 const formItem = [
-  // prop 一般与后端参数保持一致
   {
     comp: 'input',
     prop: 'title',
@@ -123,7 +109,6 @@ const formItem = [
   },
 ]
 
-// 分页参数
 const pagination = reactive({
   currentPage: 1,
   size: 10,
@@ -145,15 +130,11 @@ const handlePageChange = (page) => {
   handleSearch()
 }
 
-// 分类的映射
 const categoryMap = reactive({})
-// 分类列表
 const categories = ref([])
 
-// 列表数据
 const tableData = ref([])
 
-// 新增和编辑
 const dialogVisible = ref(false)
 
 onMounted(async () => {
@@ -168,7 +149,6 @@ onMounted(async () => {
   })
   formItem[1].options = categories.value
 
-  // 获取列表
   handleSearch({})
 })
 

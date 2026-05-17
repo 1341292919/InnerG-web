@@ -57,7 +57,7 @@
 </template>
 <script setup>
 import { ref, reactive, computed, onUnmounted } from 'vue'
-import { getVerifyCode, register } from '@/api/auth/auth'
+import { getVerifyCode, register } from '@/api'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
@@ -117,18 +117,13 @@ const handleGetVerifyCode = () => {
     } else {
       isloading.value = true
       getVerifyCode(formData.value.email)
-        .then((res) => {
+        .then((_res) => {
           isloading.value = false
-          if (res.data.code === '10000') {
-            ElMessage.success('验证码已发送，请注意查收')
-            startCountdown(60)
-          } else {
-            ElMessage.error('发送失败，请检查后重试')
-          }
+          ElMessage.success('验证码已发送，请注意查收')
+          startCountdown(60)
         })
         .catch((_err) => {
           isloading.value = false
-          ElMessage.error('服务器繁忙，请稍后再试')
         })
     }
   })
@@ -140,13 +135,9 @@ const handleRegister = () => {
       ElMessage.error('请检查输入信息是否正确')
       return
     } else {
-      register(formData.value).then((res) => {
-        if (res.data.code === '10000') {
-          ElMessage.success('注册成功')
-          router.push('/auth/login') // ← 这里执行了
-        } else {
-          ElMessage.error('注册失败，请检查后重试')
-        }
+      register(formData.value).then((_res) => {
+        ElMessage.success('注册成功')
+        router.push('/auth/login')
       })
     }
   })

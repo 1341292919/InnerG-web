@@ -32,7 +32,7 @@
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Back } from '@element-plus/icons-vue'
-import { login } from '@/api/auth/auth'
+import { login } from '@/api'
 import { useRouter } from 'vue-router'
 
 const ruleFormRef = ref(null)
@@ -53,21 +53,15 @@ const submitForm = async () => {
   await ruleFormRef.value.validate((valid, _fields) => {
     if (valid) {
       login(formData).then((res) => {
-        console.log(res.data.code)
-        if (res.data.code == 10000) {
-          ElMessage.success('登录成功')
-          const accessToken = res.headers['access-token']
-          const refreshToken = res.headers['refresh-token']
-          localStorage.setItem('accessToken', accessToken)
-          localStorage.setItem('refreshToken', refreshToken)
-          const userInfo = res.data.data
-          localStorage.setItem('userInfo', JSON.stringify(userInfo))
-          localStorage.setItem('userAvatar', res.data.data.Avatar)
-          router.push('/')
-        } else {
-          console.log(1)
-          ElMessage.error(res.data.message || '登录失败')
-        }
+        ElMessage.success('登录成功')
+        const accessToken = res.headers['access-token']
+        const refreshToken = res.headers['refresh-token']
+        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem('refreshToken', refreshToken)
+        const userInfo = res.data.data
+        localStorage.setItem('userInfo', JSON.stringify(userInfo))
+        localStorage.setItem('userAvatar', res.data.data.Avatar)
+        router.push('/')
       })
     }
   })

@@ -45,7 +45,7 @@
 import { ref, reactive, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Back } from '@element-plus/icons-vue'
-import { verifyEmailAndLogin, getVerifyCode } from '@/api/auth/auth'
+import { verifyEmailAndLogin, getVerifyCode } from '@/api'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -91,18 +91,13 @@ const handleGetVerifyCode = () => {
     } else {
       isloading.value = true
       getVerifyCode(formData.email)
-        .then((res) => {
+        .then((_res) => {
           isloading.value = false
-          if (res.data.code === '10000') {
-            ElMessage.success('验证码已发送，请注意查收')
-            startCountdown(60)
-          } else {
-            ElMessage.error('发送失败，请检查后重试')
-          }
+          ElMessage.success('验证码已发送，请注意查收')
+          startCountdown(60)
         })
         .catch((_err) => {
           isloading.value = false
-          ElMessage.error('服务器繁忙，请稍后再试')
         })
     }
   })
@@ -113,25 +108,17 @@ const submitForm = async () => {
   if (!formRef.value) return
   await formRef.value.validate((valid, _fields) => {
     if (valid) {
-      verifyEmailAndLogin(formData)
-        .then((res) => {
-          if (res.data.code == 10000) {
-            ElMessage.success('登录成功')
-            const accessToken = res.headers['access-token']
-            const refreshToken = res.headers['refresh-token']
-            localStorage.setItem('accessToken', accessToken)
-            localStorage.setItem('refreshToken', refreshToken)
-            const userInfo = res.data.data
-            localStorage.setItem('userInfo', JSON.stringify(userInfo))
-            localStorage.setItem('userAvatar', res.data.data.Avatar)
-            router.push('/')
-          } else {
-            ElMessage.error(res.data.message || '登录失败')
-          }
-        })
-        .catch((_err) => {
-          ElMessage.error('服务器繁忙，请稍后再试')
-        })
+      verifyEmailAndLogin(formData).then((res) => {
+        ElMessage.success('登录成功')
+        const accessToken = res.headers['access-token']
+        const refreshToken = res.headers['refresh-token']
+        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem('refreshToken', refreshToken)
+        const userInfo = res.data.data
+        localStorage.setItem('userInfo', JSON.stringify(userInfo))
+        localStorage.setItem('userAvatar', res.data.data.Avatar)
+        router.push('/')
+      })
     }
   })
 }

@@ -89,7 +89,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Close, Camera, Edit } from '@element-plus/icons-vue'
-import { uploadAvatar, updateUserAccount, updateUserGender, updateUserName } from '@/api/auth/auth'
+import { uploadAvatar, updateUserAccount, updateUserGender, updateUserName } from '@/api'
 
 const emit = defineEmits(['close', 'update'])
 
@@ -131,34 +131,22 @@ const startEdit = (field) => {
 const saveField = (field) => {
   editingFields[field] = false
   if (field === 'username') {
-    updateUserName({ username: userInfo.UserName }).then((res) => {
-      if (res.data.code === '10000') {
-        ElMessage.success('用户名更新成功')
-        emit('update', userInfo)
-      } else {
-        ElMessage.error('用户名更新失败')
-      }
+    updateUserName({ username: userInfo.UserName }).then((_res) => {
+      ElMessage.success('用户名更新成功')
+      emit('update', userInfo)
     })
   } else if (field === 'email') {
     // TODO: 调用修改邮箱接口
   } else if (field === 'account') {
-    updateUserAccount({ Account: userInfo.Account }).then((res) => {
-      if (res.data.code === '10000') {
-        ElMessage.success('账号更新成功')
-        emit('update', userInfo)
-      } else {
-        ElMessage.error(res.data.message || '账号更新失败')
-      }
+    updateUserAccount({ Account: userInfo.Account }).then((_res) => {
+      ElMessage.success('账号更新成功')
+      emit('update', userInfo)
     })
   } else if (field === 'gender') {
     const genderValue = String(userInfo.Gender)
-    updateUserGender({ gender: genderValue }).then((res) => {
-      if (res.data.code === '10000') {
-        ElMessage.success('性别更新成功')
-        emit('update', userInfo)
-      } else {
-        ElMessage.error('性别更新失败')
-      }
+    updateUserGender({ gender: genderValue }).then((_res) => {
+      ElMessage.success('性别更新成功')
+      emit('update', userInfo)
     })
   }
 }

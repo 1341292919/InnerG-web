@@ -26,7 +26,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getPlayListDetail } from '@/api/music/music'
+import { getPlayListDetail } from '@/api'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 const route = useRoute()
@@ -47,10 +47,8 @@ const getPlayListSongsList = () => {
   loading.value = true
   getPlayListDetail(playlistId.value)
     .then((res) => {
-      if (res.data.code == 10000) {
-        playlistName.value = res.data.data.PlaylistDetail.Name
-        playSongsList.value = res.data.data.PlaylistDetail.Songs
-      }
+      playlistName.value = res.data.data.PlaylistDetail.Name
+      playSongsList.value = res.data.data.PlaylistDetail.Songs
       loading.value = false
     })
     .catch(() => {

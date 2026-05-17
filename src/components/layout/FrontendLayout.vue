@@ -42,7 +42,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { logout, getUserInfo } from '@/api/auth/auth'
+import { logout, getUserInfo } from '@/api'
 import UserInfo from '@/components/common/UserInfo.vue'
 const iconUrl = new URL('../../assets/dog.svg', import.meta.url).href
 

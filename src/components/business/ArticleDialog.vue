@@ -84,7 +84,7 @@
 <script setup>
 import { ref, reactive, computed, nextTick, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { uploadFile, createArticle, updateArticle } from '@/api/backend/knowledge'
+import { uploadFile, createArticle, updateArticle } from '@/api'
 import { fileBaseUrl } from '@/config/config'
 import RichTextEditor from '@/components/business/RichTextEditor.vue'
 // <!-- Vue 规定 props 是只读的，不能直接修改 -->

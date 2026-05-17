@@ -80,7 +80,7 @@
 </template>
 <script setup>
 import PageHead from '@/components/common/PageHead.vue'
-import { consultationPage, getSessionDetail } from '@/api/backend/consultations'
+import { consultationPage, getSessionMessages } from '@/api'
 import { onMounted, ref, reactive } from 'vue'
 
 const tableData = ref([])
@@ -102,7 +102,7 @@ const loadingMessages = ref(false)
 const viewSessionDetail = (row) => {
   loadingMessages.value = true
   showDetailDialog.value = true
-  getSessionDetail(row.id).then((res) => {
+  getSessionMessages(row.id).then((res) => {
     sessionMessages.value = res
     sessionDetail.value = row
     loadingMessages.value = false

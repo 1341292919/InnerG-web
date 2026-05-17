@@ -31,7 +31,7 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getPlayList, getMusicList } from '@/api/music/music'
+import { getPlayList, getMusicList } from '@/api'
 import { useRouter } from 'vue-router' // 添加这行
 
 const router = useRouter() // 添加这行
@@ -40,17 +40,13 @@ const songsList = ref([])
 
 const fetchPlaylists = async () => {
   getPlayList({ pageNum: 1, pageSize: 5 }).then((res) => {
-    if (res.data.code == 10000) {
-      playlists.value = res.data.data.PlaylistList
-    }
+    playlists.value = res.data.data.PlaylistList
   })
 }
 
 const fetchNewSongs = async () => {
   getMusicList({ pageNum: 1, pageSize: 10 }).then((res) => {
-    if (res.data.code == 10000) {
-      songsList.value = res.data.data.SongList
-    }
+    songsList.value = res.data.data.SongList
   })
 }
 
