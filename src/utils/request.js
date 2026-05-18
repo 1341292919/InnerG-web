@@ -2,6 +2,13 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { ResultEnum, RejectEnum, SuccessCodeList } from '@/api/enum'
 
+function clearAuth() {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
+  localStorage.removeItem('userInfo')
+  localStorage.removeItem('userAvatar')
+}
+
 const service = axios.create({
   baseURL: '/api/v1',
   timeout: 10000,
@@ -81,11 +88,8 @@ service.interceptors.response.use(
         .catch(() => {
           rejectQueue({ type: RejectEnum.AuthFailed })
           refreshing = false
-          localStorage.removeItem('accessToken')
-          localStorage.removeItem('refreshToken')
-          localStorage.removeItem('userInfo')
-          localStorage.removeItem('userAvatar')
-          window.location.href = '/auth/login'
+          clearAuth()
+          ElMessage.warning('登录已过期，请重新登录')
           return Promise.reject({ type: RejectEnum.AuthFailed })
         })
     }
@@ -93,11 +97,8 @@ service.interceptors.response.use(
     ElMessage.error(data.message || '请求失败')
 
     if (data.code === ResultEnum.AuthInvalidCode || data.code === ResultEnum.AuthRefreshExpiredCode) {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-      localStorage.removeItem('userInfo')
-      localStorage.removeItem('userAvatar')
-      window.location.href = '/auth/login'
+      clearAuth()
+      ElMessage.warning('登录已过期，请重新登录')
     }
 
     return Promise.reject({ type: RejectEnum.BizFailed, data })

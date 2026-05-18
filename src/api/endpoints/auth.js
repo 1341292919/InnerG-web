@@ -109,3 +109,26 @@ export function updateUserName(data) {
 export function updateUserGender(data) {
   return service.post('/user/update/gender', data)
 }
+
+/**
+ * 刷新 token
+ * GET /api/v1/user/refresh-token
+ * 请求头携带 refresh-token，刷新成功会在 response header 返回新的 access-token 和 refresh-token
+ * @returns {Promise<import('axios').AxiosResponse<{code: string, message: string}>>}
+ */
+export function refreshToken() {
+  const token = localStorage.getItem('refreshToken')
+  return service.get('/user/refresh-token', {
+    headers: { Authorization: token },
+  })
+}
+
+/**
+ * 清理本地登录态
+ */
+export function clearAuth() {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
+  localStorage.removeItem('userInfo')
+  localStorage.removeItem('userAvatar')
+}
