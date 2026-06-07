@@ -834,18 +834,33 @@ const formatTimeAgo = (timestamp) => {
           flex-shrink: 0;
         }
         &.ai-message {
+          align-self: flex-start;
           .message-avatar {
             background: linear-gradient(135deg, #fb923c, #f59e0b);
             box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
           }
         }
         &.user-message {
+          align-self: flex-end;
+          flex-direction: row-reverse;
           .message-avatar {
             background: linear-gradient(135deg, #6b7280, #4b5563);
             box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
           }
+          .message-content {
+            align-items: flex-end;
+            text-align: right;
+            .message-bubble {
+              background: linear-gradient(135deg, #fb923c 0%, #f59e0b 100%);
+              color: #fff;
+              border-color: transparent;
+              box-shadow: 0 6px 18px rgba(251, 146, 60, 0.22);
+            }
+          }
         }
         .message-content {
+          display: flex;
+          flex-direction: column;
           max-width: 70%;
           .message-bubble {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 252, 248, 0.95) 100%);
