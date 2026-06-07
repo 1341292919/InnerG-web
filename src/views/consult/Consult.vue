@@ -67,7 +67,7 @@
           </el-icon>
         </el-button>
       </header>
-      <div class="chat-messages" role="log" aria-label="对话消息">
+      <div ref="chatMessagesRef" class="chat-messages" role="log" aria-label="对话消息" @scroll="handleChatScroll">
         <!--默认的欢迎消息-->
         <div v-if="messagesList.length === 0" class="message-item ai-message">
           <div class="message-avatar">
@@ -162,7 +162,7 @@
 <script setup>
 import { ChatRound, DeleteFilled, Promotion } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { newSession, getSessionList, getSessionDetail, deleteSession } from '@/api'
 import MarkdownRenderer from '@/components/common/MarkdownRenderer.vue'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
@@ -188,6 +188,41 @@ const currentSession = ref(null)
 
 const isAiTyping = ref(false)
 const userMessage = ref('')
+const chatMessagesRef = ref(null)
+const shouldAutoScroll = ref(true)
+let scrollFrameId = null
+const autoScrollThreshold = 80
+
+const isNearBottom = (el) => el.scrollHeight - el.scrollTop - el.clientHeight <= autoScrollThreshold
+
+const handleChatScroll = () => {
+  const chatMessages = chatMessagesRef.value
+  if (!chatMessages) return
+
+  shouldAutoScroll.value = isNearBottom(chatMessages)
+}
+
+// 流式回复会高频更新 DOM，用 requestAnimationFrame 合并同一帧内的滚动请求。
+const scrollToBottom = ({ force = false } = {}) => {
+  if (!force && !shouldAutoScroll.value) return
+  if (scrollFrameId) return
+
+  if (force) {
+    shouldAutoScroll.value = true
+  }
+
+  scrollFrameId = requestAnimationFrame(() => {
+    scrollFrameId = null
+    nextTick(() => {
+      const chatMessages = chatMessagesRef.value
+      if (!chatMessages) return
+
+      chatMessages.scrollTop = chatMessages.scrollHeight
+      shouldAutoScroll.value = true
+    })
+  })
+}
+
 // 用户发送信息
 const sendMessage = () => {
   if (userMessage.value.trim() === '') return
@@ -207,6 +242,7 @@ const sendMessage = () => {
       Content: message,
       CreatedAt: Math.floor(Date.now() / 1000),
     })
+    scrollToBottom({ force: true })
     startAIResponse(currentSession.value.SessionId, message)
   }
 }
@@ -220,6 +256,7 @@ const startNewSession = (message) => {
       Content: message,
       CreatedAt: Math.floor(Date.now() / 1000),
     })
+    scrollToBottom({ force: true })
     startAIResponse(currentSession.value.SessionId, message)
   })
 }
@@ -238,6 +275,7 @@ const startAIResponse = (sessionId, userMessage) => {
     CreatedAt: Math.floor(Date.now() / 1000),
   }
   messagesList.value.push(aiMessgae)
+  scrollToBottom({ force: true })
 
   // 调用流式接口
   const abortController = new AbortController() //用来中止fetch请求的
@@ -277,6 +315,7 @@ const startAIResponse = (sessionId, userMessage) => {
         handleStreamError(payload.message || 'AI回复失败')
       } else {
         aiMessage.Content += payload.Data.Content
+        scrollToBottom()
       }
     },
     onerror: (err) => {
@@ -331,6 +370,7 @@ const handleSelectSession = (session) => {
       }
       // 将返回的会话详情绑定到页面
       messagesList.value = res.data.data.SessionDetail.Messages
+      scrollToBottom({ force: true })
       // 绑定当前会话数据
       currentSession.value.SessionId = res.data.data.SessionDetail.SessionId
       currentSession.value.Title = res.data.data.SessionDetail.Title
