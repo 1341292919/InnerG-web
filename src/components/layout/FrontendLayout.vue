@@ -8,6 +8,7 @@
       <nav class="nav-section" aria-label="主导航">
         <router-link to="/" class="nav-link">首页</router-link>
         <router-link v-if="isLoggedIn" to="/consult" class="nav-link">咨询小G</router-link>
+        <router-link v-if="isLoggedIn" to="/chat" class="nav-link">伙伴聊天</router-link>
         <router-link v-if="isLoggedIn" to="/emotion-diary" class="nav-link">情绪花园</router-link>
         <el-dropdown v-if="isLoggedIn" trigger="hover" @command="handleDropdownCommand">
           <el-avatar :src="userAvatarUrl" class="user-avatar" />
@@ -58,6 +59,8 @@ const navbarGradient = computed(() => {
       return 'linear-gradient(180deg, #c5fbf4 0%, #ffffff 100%)' // 首页 - 清新绿
     case '/consult':
       return 'linear-gradient(180deg, #fff0d4 0%, #ffffff 100%)' // AI咨询 - 暖黄
+    case '/chat':
+      return 'linear-gradient(180deg, #e2faf4 0%, #ffffff 100%)' // 伙伴聊天 - 清透绿
     case '/emotion-diary':
       return 'linear-gradient(180deg, #ffe0f0 0%, #ffffff 100%)' // 情绪日记 - 粉嫩
     case '/knowledge':
