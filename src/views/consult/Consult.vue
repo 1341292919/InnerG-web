@@ -27,7 +27,7 @@
                   <span class="session-time">{{ session.UpdatedAt ? formatTimeAgo(session.UpdatedAt) : '' }}</span>
                 </div>
                 <div class="session-preview">
-                  {{ session.LastMessage }}
+                  {{ formatSessionPreview(session.LastMessage) }}
                 </div>
                 <div class="session-stats">
                   <span>
@@ -166,6 +166,7 @@ import { nextTick, onMounted, ref } from 'vue'
 import { newSession, getSessionList, getSessionDetail, deleteSession } from '@/api'
 import MarkdownRenderer from '@/components/common/MarkdownRenderer.vue'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
+import { formatSessionPreview } from '@/utils/markdown'
 
 const iconUrl = new URL('../../assets/pig.svg', import.meta.url).href
 const avatarUrl = new URL('../../assets/pig.svg', import.meta.url).href
@@ -889,12 +890,12 @@ const formatTimeAgo = (timestamp) => {
           }
           .message-content {
             align-items: flex-end;
-            text-align: right;
             .message-bubble {
               background: linear-gradient(135deg, #fb923c 0%, #f59e0b 100%);
               color: #fff;
               border-color: transparent;
               box-shadow: 0 6px 18px rgba(251, 146, 60, 0.22);
+              text-align: left;
             }
           }
         }

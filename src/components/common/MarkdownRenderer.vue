@@ -6,6 +6,8 @@
 
 <script setup>
 import { computed } from 'vue'
+import { marked } from 'marked'
+import hljs from 'highlight.js'
 
 const props = defineProps({
   content: {
@@ -18,57 +20,41 @@ const props = defineProps({
   },
 })
 
-// 简单的Markdown渲染器
+// 配置 marked
+marked.setOptions({
+  highlight: function (code, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(code, { language: lang }).value
+      } catch (err) {
+        console.error('代码高亮失败:', err)
+      }
+    }
+    return hljs.highlightAuto(code).value
+  },
+  breaks: true, // 支持 GitHub 风格换行
+  gfm: true, // 启用 GitHub Flavored Markdown
+  pedantic: false,
+  headerIds: false,
+  mangle: false,
+})
+
+// 渲染 Markdown 内容
 const renderedContent = computed(() => {
-  let html = props.content
-
-  // 转义HTML标签（防止XSS）
-  html = html.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-
-  // 处理代码块（```）
-  html = html.replace(/```(\w+)?\n([\s\S]*?)\n```/g, (match, lang, code) => {
-    return `<pre class="code-block"><code class="language-${lang || 'text'}">${code.trim()}</code></pre>`
-  })
-
-  // 处理行内代码（`）
-  html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
-
-  // 处理粗体（**）
-  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-
-  // 处理斜体（*）
-  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>')
-
-  // 处理标题
-  html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>')
-  html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>')
-  html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>')
-
-  // 处理链接
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-
-  // 处理无序列表
-  html = html.replace(/^- (.*)$/gm, '<li>$1</li>')
-  html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-
-  // 处理有序列表
-  html = html.replace(/^\d+\. (.*)$/gm, '<li>$1</li>')
-
-  // 处理引用
-  html = html.replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>')
-
-  // 处理分割线
-  html = html.replace(/^---$/gm, '<hr>')
-
-  // 处理换行
-  html = html.replace(/\n/g, '<br>')
-
-  // 清理多余的br标签
-  html = html.replace(/<br><br>/g, '<br>')
-
-  return html
+  try {
+    return marked.parse(props.content)
+  } catch (err) {
+    console.error('Markdown 渲染失败:', err)
+    // 降级处理：返回纯文本
+    return `<p>${props.content}</p>`
+  }
 })
 </script>
+
+<style>
+/* 导入 highlight.js github 主题样式 */
+@import 'highlight.js/styles/github.css';
+</style>
 
 <style scoped>
 .markdown-content {
@@ -76,45 +62,62 @@ const renderedContent = computed(() => {
   color: inherit;
 }
 
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3 {
+/* 标题样式 */
+.markdown-content :deep(h1),
+.markdown-content :deep(h2),
+.markdown-content :deep(h3),
+.markdown-content :deep(h4),
+.markdown-content :deep(h5),
+.markdown-content :deep(h6) {
   margin: 1em 0 0.5em 0;
   font-weight: 600;
   line-height: 1.3;
 }
 
-.markdown-content h1 {
+.markdown-content :deep(h1) {
   font-size: 1.5em;
   border-bottom: 2px solid #e5e7eb;
   padding-bottom: 0.3em;
 }
 
-.markdown-content h2 {
+.markdown-content :deep(h2) {
   font-size: 1.3em;
   color: #374151;
 }
 
-.markdown-content h3 {
+.markdown-content :deep(h3) {
   font-size: 1.1em;
   color: #4b5563;
 }
 
-.markdown-content p {
+.markdown-content :deep(h4) {
+  font-size: 1em;
+  color: #6b7280;
+}
+
+/* 段落样式 */
+.markdown-content :deep(p) {
   margin: 0.5em 0;
 }
 
-.markdown-content ul,
-.markdown-content ol {
+/* 列表样式 */
+.markdown-content :deep(ul),
+.markdown-content :deep(ol) {
   margin: 0.5em 0;
   padding-left: 1.5em;
 }
 
-.markdown-content li {
+.markdown-content :deep(li) {
   margin: 0.3em 0;
 }
 
-.markdown-content blockquote {
+/* 任务列表 */
+.markdown-content :deep(input[type='checkbox']) {
+  margin-right: 0.5em;
+}
+
+/* 引用样式 */
+.markdown-content :deep(blockquote) {
   border-left: 4px solid #d1d5db;
   padding-left: 1em;
   margin: 1em 0;
@@ -125,79 +128,124 @@ const renderedContent = computed(() => {
   padding: 0.5em 1em;
 }
 
-.ai-markdown blockquote {
+.ai-markdown :deep(blockquote) {
   border-left-color: #3b82f6;
   background: #eff6ff;
 }
 
-.markdown-content hr {
+/* 分割线 */
+.markdown-content :deep(hr) {
   border: none;
   border-top: 2px solid #e5e7eb;
   margin: 1.5em 0;
 }
 
-.markdown-content code.inline-code {
+/* 行内代码 */
+.markdown-content :deep(code) {
   background: #f3f4f6;
   padding: 0.2em 0.4em;
   border-radius: 0.25em;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: 'Consolas', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.85em;
   color: #e11d48;
 }
 
-.ai-markdown code.inline-code {
+.ai-markdown :deep(code) {
   background: #dbeafe;
   color: #1e40af;
 }
 
-.markdown-content pre.code-block {
-  background: #1f2937;
-  color: #f9fafb;
+/* 代码块 */
+.markdown-content :deep(pre) {
+  background: #f6f8fa;
   padding: 1em;
   border-radius: 0.5em;
   overflow-x: auto;
   margin: 1em 0;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.85em;
-  line-height: 1.4;
+  border: 1px solid #d0d7de;
 }
 
-.markdown-content pre.code-block code {
+.markdown-content :deep(pre code) {
   background: none;
   padding: 0;
   color: inherit;
+  font-family: 'Consolas', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.85em;
+  line-height: 1.45;
+  display: block;
 }
 
-.markdown-content a {
+/* 表格样式 */
+.markdown-content :deep(table) {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 0.9em;
+}
+
+.markdown-content :deep(table th),
+.markdown-content :deep(table td) {
+  border: 1px solid #d0d7de;
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.markdown-content :deep(table th) {
+  background: #f6f8fa;
+  font-weight: 600;
+}
+
+.markdown-content :deep(table tr:nth-child(even)) {
+  background: #f9fafb;
+}
+
+/* 链接样式 */
+.markdown-content :deep(a) {
   color: #3b82f6;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease;
 }
 
-.markdown-content a:hover {
+.markdown-content :deep(a:hover) {
   border-bottom-color: #3b82f6;
 }
 
-.ai-markdown a {
+.ai-markdown :deep(a) {
   color: #1e40af;
 }
 
-.ai-markdown a:hover {
+.ai-markdown :deep(a:hover) {
   border-bottom-color: #1e40af;
 }
 
-.markdown-content strong {
+/* 粗体 */
+.markdown-content :deep(strong) {
   font-weight: 600;
   color: #374151;
 }
 
-.ai-markdown strong {
+.ai-markdown :deep(strong) {
   color: #1e40af;
 }
 
-.markdown-content em {
+/* 斜体 */
+.markdown-content :deep(em) {
   font-style: italic;
   color: #6b7280;
+}
+
+/* 图片 */
+.markdown-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5em;
+  margin: 0.5em 0;
+}
+
+/* 删除线 */
+.markdown-content :deep(del) {
+  text-decoration: line-through;
+  color: #9ca3af;
 }
 </style>
