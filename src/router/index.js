@@ -38,6 +38,10 @@ const routes = [
         component: () => import('@/views/consult/Consult.vue'),
       },
       {
+        path: 'chat',
+        component: () => import('@/views/chat/FriendChat.vue'),
+      },
+      {
         path: 'emotion-diary',
         component: () => import('@/views/mood/MoodGarden.vue'),
       },
